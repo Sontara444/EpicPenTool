@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epic Pen</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="toolbar">
+        <button onclick="clearCanvas()">Clear</button>
+        
+        <!-- 🎨 Color Palette -->
+        <div id="colorPalette">
+            <button class="color-btn" style="background: red;" onclick="changeColor('#ff0000')"></button>
+            <button class="color-btn" style="background: blue;" onclick="changeColor('#0000ff')"></button>
+            <button class="color-btn" style="background: green;" onclick="changeColor('#008000')"></button>
+            <button class="color-btn" style="background: yellow;" onclick="changeColor('#ffff00')"></button>
+            <button class="color-btn" style="background: black;" onclick="changeColor('#000000')"></button>
+            <button class="color-btn" style="background: purple;" onclick="changeColor('#800080')"></button>
+        </div>
+
+        <!-- 🎨 Custom Color Picker -->
+        <input type="color" id="colorPicker" onchange="changeColor(this.value)">
+
+        <!-- 🔧 Pen Size -->
+        <input type="range" id="sizePicker" min="1" max="10" value="2" onchange="changeSize(this.value)">
+
+        <!-- ❌ Close Button -->
+        <button onclick="closeApp()">Close</button>
+    </div>
+
+    <canvas id="drawCanvas"></canvas>
+    <script src="renderer.js"></script>
+</body>
+</html>
