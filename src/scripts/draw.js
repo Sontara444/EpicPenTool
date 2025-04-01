@@ -7,6 +7,8 @@ export function setupDrawCanvas(canvas) {
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mousemove', draw);
 
+    console.log("something new")
+
     function startDrawing(event) {
         drawing = true;
         ctx.beginPath();
