@@ -1,0 +1,63 @@
+:root {
+  --primary-accent: #ff00aa; /* Vibrant magenta */
+  --toolbar-bg: rgba(255, 255, 255, 0.9);
+  --toolbar-border: rgba(0, 0, 0, 0.05);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.toolbar {
+  position: fixed;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  background: var(--toolbar-bg);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--toolbar-border);
+  gap: 6px;
+  width: 36px; /* Compact width */
+}
+
+.tool-button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  font-size: 16px;
+}
+
+.tool-button:hover {
+  background: rgba(255, 0, 170, 0.1);
+}
+
+.tool-button.active {
+  background: rgba(255, 0, 170, 0.2);
+  color: var(--primary-accent);
+}
+
+.tool-button:active {
+  transform: scale(0.92);
+}

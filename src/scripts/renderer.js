@@ -6,23 +6,24 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.width = 800;
     canvas.height = 500;
 
-    const { clearCanvas, redraw } = setupDrawCanvas(canvas);
     let elements = [];
+    const { clearCanvas, redraw } = setupDrawCanvas(canvas, elements);
+    
+    setupEraseCanvas(canvas, elements, redraw);
 
-    document.getElementById('clearBtn').addEventListener('click', () => {
-        clearCanvas();
-    });
-
+    // Button Event Listeners
+    document.getElementById('clearBtn').addEventListener('click', clearCanvas);
+    
+    // Pencil Button (Drawing Mode)
     document.getElementById('pencilBtn').addEventListener('click', () => {
-        // Setup drawing logic
-        const { clearCanvas: clearDraw, redraw: redrawDraw } = setupDrawCanvas(canvas);
-        elements = [];
+        const { clearCanvas: clearDraw, redraw: redrawDraw } = setupDrawCanvas(canvas, elements);
+        elements = []; // Reset elements for new drawing
         clearDraw();
         redrawDraw();
     });
-
+    
+    // Eraser Button (Erasing Mode)
     document.getElementById('eraserBtn').addEventListener('click', () => {
-        // Setup erasing logic
-        setupEraseCanvas(canvas, elements);
+        setupEraseCanvas(canvas, elements, redraw);
     });
 });

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epic Pen</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    
+    <div class="toolbar">
+        <button id="pencilBtn" class="tool-button active" title="Pencil">
+            <svg class="tool-icon" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.39-.39-1.04-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+        </button>
+        <button id="eraserBtn" class="tool-button" title="Eraser">
+            <svg class="tool-icon" viewBox="0 0 24 24"><path d="M16.24 3.56l4.95 4.94c.78.79.78 2.05 0 2.84L12 20.53a4.008 4.008 0 0 1-5.66 0L2.81 17c-.78-.79-.78-2.05 0-2.84l10.6-10.6c.79-.78 2.05-.78 2.83 0M4.22 15.58l3.54 3.53c.78.79 2.04.79 2.83 0l3.53-3.53-4.95-4.95-4.95 4.95z"/></svg>
+        </button>
+        <button id="clearBtn" class="tool-button" title="Clear">
+            <svg class="tool-icon" viewBox="0 0 24 24"><path d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12z"/></svg>
+        </button>
+    </div>
+
+    <script type="module" src="./scripts/renderer.js"></script>
+</body>
+</html>
