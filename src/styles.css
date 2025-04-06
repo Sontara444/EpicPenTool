@@ -18,6 +18,10 @@ canvas {
   pointer-events: auto;
 }
 
+canvas.disabled {
+  pointer-events: none;
+}
+
 .toolbar {
   position: fixed;
   top: 100px;
@@ -64,6 +68,10 @@ canvas {
   filter: none;
 }
 
-#toggleBtn.active {
-  background-color: red;
+#toggleBtn.toggle-on {
+  background-color: #4caf50;
+}
+
+#toggleBtn.toggle-off {
+  background-color: #f44336;
 }
