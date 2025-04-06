@@ -5,19 +5,19 @@ let mainWindow;
 
 const createWindow = () => {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        fullscreen: true, // 👈 Fullscreen enabled
         frame: false,
-        transparent: true,
+        transparent: true, // 👈 Makes background transparent
         alwaysOnTop: true,
         resizable: false,
+        hasShadow: false,
+        skipTaskbar: true, // Optional: Hides it from taskbar
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
         }
     });
 
-    // Load index.html from src/
     mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
     mainWindow.on('closed', () => {

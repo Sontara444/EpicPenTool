@@ -1,63 +1,69 @@
-:root {
-  --primary-accent: #ff00aa; /* Vibrant magenta */
-  --toolbar-bg: rgba(255, 255, 255, 0.9);
-  --toolbar-border: rgba(0, 0, 0, 0.05);
-}
-
 body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background: transparent;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-#canvas {
+canvas {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  background: transparent;
+  z-index: 0;
+  pointer-events: auto;
 }
 
 .toolbar {
   position: fixed;
-  top: 50%;
-  left: 12px;
-  transform: translateY(-50%);
+  top: 100px;
+  left: 30px;
   display: flex;
   flex-direction: column;
-  background: var(--toolbar-bg);
-  backdrop-filter: blur(8px);
-  border-radius: 10px;
-  padding: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--toolbar-border);
-  gap: 6px;
-  width: 36px; /* Compact width */
+  gap: 14px;
+  background-color: white;
+  padding: 12px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  cursor: grab;
+  user-select: none;
 }
 
 .tool-button {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: transparent;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
   border: none;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.15s ease;
-  font-size: 16px;
+  border-radius: 12px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.tool-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: grayscale(100%);
+  transition: filter 0.3s;
 }
 
 .tool-button:hover {
-  background: rgba(255, 0, 170, 0.1);
+  background-color: #f0f0f0;
+  transform: scale(1.05);
 }
 
 .tool-button.active {
-  background: rgba(255, 0, 170, 0.2);
-  color: var(--primary-accent);
+  background-color: #00bcd4;
 }
 
-.tool-button:active {
-  transform: scale(0.92);
+.tool-button.active img {
+  filter: none;
+}
+
+#toggleBtn.active {
+  background-color: red;
 }

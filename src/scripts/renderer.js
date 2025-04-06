@@ -1,29 +1,100 @@
-import { setupDrawCanvas } from './draw.js';  // Drawing logic
-import { setupEraseCanvas } from './eraser.js'; // Erasing logic
+import { setupDrawCanvas } from './draw.js';
+import { setupEraseCanvas } from './eraser.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('canvas');
-    canvas.width = 800;
-    canvas.height = 500;
+  const canvas = document.getElementById('canvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-    let elements = [];
-    const { clearCanvas, redraw } = setupDrawCanvas(canvas, elements);
-    
-    setupEraseCanvas(canvas, elements, redraw);
+  let elements = [];
+  let currentTool = 'pencil';
+  let drawingEnabled = true;
 
-    // Button Event Listeners
-    document.getElementById('clearBtn').addEventListener('click', clearCanvas);
-    
-    // Pencil Button (Drawing Mode)
-    document.getElementById('pencilBtn').addEventListener('click', () => {
-        const { clearCanvas: clearDraw, redraw: redrawDraw } = setupDrawCanvas(canvas, elements);
-        elements = []; // Reset elements for new drawing
-        clearDraw();
-        redrawDraw();
-    });
-    
-    // Eraser Button (Erasing Mode)
-    document.getElementById('eraserBtn').addEventListener('click', () => {
-        setupEraseCanvas(canvas, elements, redraw);
-    });
+  let drawHandlers = setupDrawCanvas(canvas, elements);
+  let eraseHandlers = setupEraseCanvas(canvas, elements, drawHandlers.redraw);
+
+  const toggleBtn = document.getElementById('toggleBtn');
+  const pencilBtn = document.getElementById('pencilBtn');
+  const eraserBtn = document.getElementById('eraserBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const toolButtons = document.querySelectorAll('.tool-button');
+
+  function setActiveTool(tool) {
+    if (!drawingEnabled) return;
+
+    toolButtons.forEach(btn => btn.classList.remove('active'));
+
+    if (tool === 'pencil') {
+      pencilBtn.classList.add('active');
+    } else if (tool === 'eraser') {
+      eraserBtn.classList.add('active');
+    }
+  }
+
+  pencilBtn.addEventListener('click', () => {
+    if (!drawingEnabled) return;
+    currentTool = 'pencil';
+    drawHandlers = setupDrawCanvas(canvas, elements);
+    setActiveTool('pencil');
+  });
+
+  eraserBtn.addEventListener('click', () => {
+    if (!drawingEnabled) return;
+    currentTool = 'eraser';
+    eraseHandlers = setupEraseCanvas(canvas, elements, drawHandlers.redraw);
+    setActiveTool('eraser');
+  });
+
+  clearBtn.addEventListener('click', () => {
+    if (!drawingEnabled) return;
+    drawHandlers.clearCanvas();
+  });
+
+  // ✅ Toggle Drawing Mode
+  toggleBtn.addEventListener('click', () => {
+    drawingEnabled = !drawingEnabled;
+
+    // Visually update button
+    toggleBtn.classList.toggle('toggle-on', drawingEnabled);
+    toggleBtn.classList.toggle('toggle-off', !drawingEnabled);
+
+    // Update canvas pointer access
+    if (drawingEnabled) {
+      canvas.classList.remove('disabled');
+      setActiveTool(currentTool);
+    } else {
+      canvas.classList.add('disabled');
+      toolButtons.forEach(btn => btn.classList.remove('active'));
+    }
+  });
+
+  // ✅ Set initial states
+  setActiveTool(currentTool);
+  toggleBtn.classList.add('toggle-on');
+
+  // 🖱️ Draggable Toolbar
+  const toolbar = document.getElementById('toolbar');
+  let isDragging = false;
+  let offsetX = 0, offsetY = 0;
+
+  toolbar.addEventListener('mousedown', (e) => {
+    if (!e.target.closest('button')) {
+      isDragging = true;
+      offsetX = e.clientX - toolbar.offsetLeft;
+      offsetY = e.clientY - toolbar.offsetTop;
+      toolbar.style.opacity = '0.9';
+    }
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      toolbar.style.left = `${e.clientX - offsetX}px`;
+      toolbar.style.top = `${e.clientY - offsetY}px`;
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    toolbar.style.opacity = '1';
+  });
 });
