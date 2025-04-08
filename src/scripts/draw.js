@@ -19,7 +19,7 @@ export function setupDrawCanvas(canvas, elements) {
       const y = e.clientY - canvas.offsetTop;
       ctx.lineWidth = 2;
       ctx.lineCap = 'round';
-      ctx.strokeStyle = '#000';
+      ctx.strokeStyle = '#39FF14';
       ctx.lineTo(x, y);
       ctx.stroke();
       currentPath.push({ x, y });

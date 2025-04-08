@@ -21,9 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function setActiveTool(tool) {
     if (!drawingEnabled) return;
+
     toolButtons.forEach(btn => btn.classList.remove('active'));
-    if (tool === 'pencil') pencilBtn.classList.add('active');
-    else if (tool === 'eraser') eraserBtn.classList.add('active');
+
+    if (tool === 'pencil') {
+      pencilBtn.classList.add('active');
+    } else if (tool === 'eraser') {
+      eraserBtn.classList.add('active');
+    }
   }
 
   pencilBtn.addEventListener('click', () => {
@@ -48,18 +53,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // ✅ Toggle Drawing Mode
   toggleBtn.addEventListener('click', () => {
     drawingEnabled = !drawingEnabled;
-    canvas.classList.toggle('disabled', !drawingEnabled);
-
+  
     toggleBtn.classList.toggle('toggle-on', drawingEnabled);
     toggleBtn.classList.toggle('toggle-off', !drawingEnabled);
-
-    if (!drawingEnabled) {
-      toolButtons.forEach(btn => btn.classList.remove('active'));
-    } else {
+  
+    if (drawingEnabled) {
+      canvas.classList.remove('disabled');
+      canvas.style.pointerEvents = 'auto'; 
       setActiveTool(currentTool);
+    } else {
+      canvas.classList.add('disabled');
+      canvas.style.pointerEvents = 'none'; 
+      toolButtons.forEach(btn => btn.classList.remove('active'));
     }
   });
+  
 
+  // ✅ Set initial states
   setActiveTool(currentTool);
   toggleBtn.classList.add('toggle-on');
 

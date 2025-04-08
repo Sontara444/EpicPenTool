@@ -75,3 +75,6 @@ canvas.disabled {
 #toggleBtn.toggle-off {
   background-color: #f44336;
 }
+canvas.disabled {
+  pointer-events: none;
+}
