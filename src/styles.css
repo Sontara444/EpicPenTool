@@ -78,3 +78,11 @@ canvas.disabled {
 canvas.disabled {
   pointer-events: none;
 }
+/* styles.css */
+#toggleBtn.toggle-on {
+  background-color: #00cc66; /* green */
+}
+
+#toggleBtn.toggle-off {
+  background-color: #ff4444; /* red */
+}

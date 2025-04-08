@@ -10,37 +10,20 @@
   <canvas id="canvas"></canvas>
 
   <div class="toolbar" id="toolbar">
-    <!-- <button id="toggleBtn" class="tool-button toggle-on" title="Toggle Mode">
+    <button id="toggleBtn" class="tool-button toggle-on" title="Toggle Mode">
       <img src="./scripts/images/arrow.png" alt="Toggle" />
-    </button> -->
+    </button>
     <button id="pencilBtn" class="tool-button active" title="Pencil">
       <img src="./scripts/images/pencil.png" alt="Pencil" />
     </button>
-    <!-- <button id="pencilBtn" class="tool-button active" title="">
-      <img src="./scripts/images/pencil.png" alt="Pencil" />
-    </button> -->
     <button id="eraserBtn" class="tool-button" title="Eraser">
       <img src="./scripts/images/eraser.png" alt="Eraser" />
     </button>
+    <input type="range" id="thicknessSlider" min="1" max="20" value="2" title="Thickness" />
     <button id="clearBtn" class="tool-button" title="Clear">
       <img src="./scripts/images/clear.png" alt="Clear" />
     </button>
-  
-    <!-- 🆕 Extra image buttons -->
-    <button class="tool-button" title="Camera">
-      <img src="./scripts/images/camera.png" alt="Camera" />
-    </button>
-    <button class="tool-button" title="Eye">
-      <img src="./scripts/images/eye.png" alt="Eye" />
-    </button>
-    <button class="tool-button" title="Line">
-      <img src="./scripts/images/line.png" alt="Line" />
-    </button>
-    <button class="tool-button" title="List">
-      <img src="./scripts/images/list.png" alt="List" />
-    </button>
   </div>
-  
 
   <script type="module" src="./scripts/renderer.js"></script>
 </body>

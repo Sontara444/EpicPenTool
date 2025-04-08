@@ -1,5 +1,6 @@
 import { setupDrawCanvas } from './draw.js';
 import { setupEraseCanvas } from './eraser.js';
+import { setupToggleDrawing } from './toggle.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('canvas');
@@ -9,32 +10,29 @@ document.addEventListener('DOMContentLoaded', () => {
   let elements = [];
   let currentTool = 'pencil';
   let drawingEnabled = true;
-
-  let drawHandlers = setupDrawCanvas(canvas, elements);
-  let eraseHandlers = setupEraseCanvas(canvas, elements, drawHandlers.redraw);
+  let pencilThickness = 2;
 
   const toggleBtn = document.getElementById('toggleBtn');
   const pencilBtn = document.getElementById('pencilBtn');
   const eraserBtn = document.getElementById('eraserBtn');
   const clearBtn = document.getElementById('clearBtn');
+  const thicknessSlider = document.getElementById('thicknessSlider');
   const toolButtons = document.querySelectorAll('.tool-button');
+
+  let drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness);
+  let eraseHandlers = setupEraseCanvas(canvas, elements, drawHandlers.redraw);
 
   function setActiveTool(tool) {
     if (!drawingEnabled) return;
-
     toolButtons.forEach(btn => btn.classList.remove('active'));
-
-    if (tool === 'pencil') {
-      pencilBtn.classList.add('active');
-    } else if (tool === 'eraser') {
-      eraserBtn.classList.add('active');
-    }
+    if (tool === 'pencil') pencilBtn.classList.add('active');
+    if (tool === 'eraser') eraserBtn.classList.add('active');
   }
 
   pencilBtn.addEventListener('click', () => {
     if (!drawingEnabled) return;
     currentTool = 'pencil';
-    drawHandlers = setupDrawCanvas(canvas, elements);
+    drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness);
     setActiveTool('pencil');
   });
 
@@ -50,36 +48,31 @@ document.addEventListener('DOMContentLoaded', () => {
     drawHandlers.clearCanvas();
   });
 
-  // ✅ Toggle Drawing Mode
-  toggleBtn.addEventListener('click', () => {
-    drawingEnabled = !drawingEnabled;
-  
-    toggleBtn.classList.toggle('toggle-on', drawingEnabled);
-    toggleBtn.classList.toggle('toggle-off', !drawingEnabled);
-  
+  thicknessSlider.addEventListener('input', (e) => {
+    pencilThickness = parseInt(e.target.value, 10);
+    if (currentTool === 'pencil') {
+      drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness);
+    }
+  });
+
+  // 🟢🔴 Setup toggle drawing functionality
+  setupToggleDrawing(toggleBtn, canvas, () => drawingEnabled, (val) => {
+    drawingEnabled = val;
     if (drawingEnabled) {
-      canvas.classList.remove('disabled');
-      canvas.style.pointerEvents = 'auto'; 
       setActiveTool(currentTool);
     } else {
-      canvas.classList.add('disabled');
-      canvas.style.pointerEvents = 'none'; 
       toolButtons.forEach(btn => btn.classList.remove('active'));
     }
   });
-  
 
-  // ✅ Set initial states
   setActiveTool(currentTool);
-  toggleBtn.classList.add('toggle-on');
 
   // 🖱️ Draggable Toolbar
   const toolbar = document.getElementById('toolbar');
-  let isDragging = false;
-  let offsetX = 0, offsetY = 0;
+  let isDragging = false, offsetX = 0, offsetY = 0;
 
   toolbar.addEventListener('mousedown', (e) => {
-    if (!e.target.closest('button')) {
+    if (!e.target.closest('button') && e.target !== thicknessSlider) {
       isDragging = true;
       offsetX = e.clientX - toolbar.offsetLeft;
       offsetY = e.clientY - toolbar.offsetTop;
