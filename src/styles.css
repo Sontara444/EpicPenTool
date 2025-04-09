@@ -16,10 +16,12 @@ canvas {
   background: transparent;
   z-index: 0;
   pointer-events: auto;
+  transition: opacity 0.3s ease-in-out;
 }
 
 canvas.disabled {
   pointer-events: none;
+  opacity: 0.5;
 }
 
 .toolbar {
@@ -29,60 +31,62 @@ canvas.disabled {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  background-color: white;
-  padding: 12px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  background-color: #ffffffcc;
+  padding: 14px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   cursor: grab;
   user-select: none;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .tool-button {
-  width: 50px;
-  height: 50px;
-  background-color: transparent;
+  width: 52px;
+  height: 52px;
+  background-color: #ffffff;
   border: none;
-  border-radius: 12px;
-  transition: background-color 0.3s, transform 0.2s;
+  border-radius: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .tool-button img {
-  width: 100%;
-  height: 100%;
+  width: 60%;
+  height: 60%;
   object-fit: contain;
   filter: grayscale(100%);
-  transition: filter 0.3s;
+  transition: filter 0.3s ease;
 }
 
 .tool-button:hover {
-  background-color: #f0f0f0;
-  transform: scale(1.05);
+  background-color: #f7f7f7;
+  transform: scale(1.08);
 }
 
 .tool-button.active {
   background-color: #00bcd4;
+  box-shadow: 0 4px 16px rgba(0, 188, 212, 0.4);
 }
 
 .tool-button.active img {
   filter: none;
 }
 
+#toggleBtn {
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
 #toggleBtn.toggle-on {
-  background-color: #4caf50;
+  background-color: #00cc66;
+  box-shadow: 0 4px 16px rgba(0, 204, 102, 0.4);
 }
 
 #toggleBtn.toggle-off {
-  background-color: #f44336;
-}
-canvas.disabled {
-  pointer-events: none;
-}
-/* styles.css */
-#toggleBtn.toggle-on {
-  background-color: #00cc66; /* green */
-}
-
-#toggleBtn.toggle-off {
-  background-color: #ff4444; /* red */
+  background-color: #ff4444;
+  box-shadow: 0 4px 16px rgba(255, 68, 68, 0.4);
 }
