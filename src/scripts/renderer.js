@@ -16,8 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const pencilBtn = document.getElementById('pencilBtn');
   const eraserBtn = document.getElementById('eraserBtn');
   const clearBtn = document.getElementById('clearBtn');
-  const thicknessSlider = document.getElementById('thicknessSlider');
   const toolButtons = document.querySelectorAll('.tool-button');
+  const thicknessWrapper = document.querySelector('.thickness-wrapper');
+  const thicknessDots = document.querySelectorAll('.thickness-dot');
 
   let drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness);
   let eraseHandlers = setupEraseCanvas(canvas, elements, drawHandlers.redraw);
@@ -48,14 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
     drawHandlers.clearCanvas();
   });
 
-  thicknessSlider.addEventListener('input', (e) => {
-    pencilThickness = parseInt(e.target.value, 10);
-    if (currentTool === 'pencil') {
-      drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness);
-    }
+  thicknessDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      pencilThickness = parseInt(dot.dataset.size, 10);
+      thicknessDots.forEach(d => d.classList.remove('selected'));
+      dot.classList.add('selected');
+      if (currentTool === 'pencil') {
+        drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness);
+      }
+    });
   });
 
-  // 🟢🔴 Toggle drawing mode
+  // 🌟 Toggle drawing mode
   setupToggleDrawing(toggleBtn, canvas, () => drawingEnabled, (val) => {
     drawingEnabled = val;
     if (drawingEnabled) {
@@ -66,13 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   setActiveTool(currentTool);
+  document.querySelector('.thickness-dot[data-size="2"]').classList.add('selected');
 
-  // 🖱️ Draggable Toolbar
+  // 🔱 Draggable Toolbar
   const toolbar = document.getElementById('toolbar');
   let isDragging = false, offsetX = 0, offsetY = 0;
 
   toolbar.addEventListener('mousedown', (e) => {
-    if (!e.target.closest('button') && e.target !== thicknessSlider) {
+    if (!e.target.closest('button') && !e.target.closest('.thickness-wrapper')) {
       isDragging = true;
       offsetX = e.clientX - toolbar.offsetLeft;
       offsetY = e.clientY - toolbar.offsetTop;
@@ -100,8 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
   hamburgerBtn.addEventListener('click', () => {
     toolbarVisible = !toolbarVisible;
     toolbar.style.display = toolbarVisible ? 'flex' : 'none';
-    eyeIcon.src = toolbarVisible
-      ? './scripts/images/eye.png'
-      : './scripts/images/close.png';
+    if (eyeIcon) {
+      eyeIcon.src = toolbarVisible
+        ? './scripts/images/eye.png'
+        : './scripts/images/close.png';
+    }
   });
 });
