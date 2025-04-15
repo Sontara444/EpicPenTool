@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 🟢🔴 Setup toggle drawing functionality
+  // 🟢🔴 Toggle drawing mode
   setupToggleDrawing(toggleBtn, canvas, () => drawingEnabled, (val) => {
     drawingEnabled = val;
     if (drawingEnabled) {
@@ -90,5 +90,18 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('mouseup', () => {
     isDragging = false;
     toolbar.style.opacity = '1';
+  });
+
+  // 👁️ Hamburger Toggle Logic
+  const hamburgerBtn = document.getElementById('hamburgerToggle');
+  const eyeIcon = document.getElementById('eyeIcon');
+  let toolbarVisible = true;
+
+  hamburgerBtn.addEventListener('click', () => {
+    toolbarVisible = !toolbarVisible;
+    toolbar.style.display = toolbarVisible ? 'flex' : 'none';
+    eyeIcon.src = toolbarVisible
+      ? './scripts/images/eye.png'
+      : './scripts/images/close.png';
   });
 });

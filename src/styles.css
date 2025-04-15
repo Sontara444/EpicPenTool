@@ -1,3 +1,8 @@
+:root {
+  --white-glass: #ffffffcc;
+  --glass-border: rgba(255, 255, 255, 0.4);
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -21,27 +26,29 @@ canvas {
 
 canvas.disabled {
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .toolbar {
   position: fixed;
-  top: 100px;
+  top: 30px;
   left: 30px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 14px;
-  background-color: #ffffffcc;
-  padding: 14px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background-color: var(--white-glass);
+  padding: 16px;
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
   z-index: 9999;
-  cursor: grab;
   user-select: none;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  cursor: grab;
 }
 
+/* Tool Buttons */
 .tool-button {
   width: 52px;
   height: 52px;
@@ -77,10 +84,6 @@ canvas.disabled {
   filter: none;
 }
 
-#toggleBtn {
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
 #toggleBtn.toggle-on {
   background-color: #00cc66;
   box-shadow: 0 4px 16px rgba(0, 204, 102, 0.4);
@@ -89,4 +92,11 @@ canvas.disabled {
 #toggleBtn.toggle-off {
   background-color: #ff4444;
   box-shadow: 0 4px 16px rgba(255, 68, 68, 0.4);
+}
+
+/* Thickness slider styling */
+#thicknessSlider {
+  width: 100%;
+  margin-top: 8px;
+  cursor: pointer;
 }
