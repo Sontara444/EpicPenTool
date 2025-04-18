@@ -1,6 +1,10 @@
 import { setupDrawCanvas } from './draw.js';
 import { setupEraseCanvas } from './eraser.js';
 import { setupToggleDrawing } from './toggle.js';
+import { setupThicknessControl } from './thickness.js';
+import { setupMenuToggle } from './menu.js';
+import { createUndoManager } from './undo.js';
+
 
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('canvas');
@@ -12,12 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let drawingEnabled = true;
   let pencilThickness = 2;
 
+  
+
   const toggleBtn = document.getElementById('toggleBtn');
   const pencilBtn = document.getElementById('pencilBtn');
   const eraserBtn = document.getElementById('eraserBtn');
   const clearBtn = document.getElementById('clearBtn');
   const toolButtons = document.querySelectorAll('.tool-button');
-  const thicknessWrapper = document.querySelector('.thickness-wrapper');
   const thicknessDots = document.querySelectorAll('.thickness-dot');
 
   let drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness);
@@ -49,18 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
     drawHandlers.clearCanvas();
   });
 
-  thicknessDots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      pencilThickness = parseInt(dot.dataset.size, 10);
-      thicknessDots.forEach(d => d.classList.remove('selected'));
-      dot.classList.add('selected');
+  setupThicknessControl(
+    thicknessDots,
+    () => currentTool,
+    (newThickness) => {
+      pencilThickness = newThickness;
       if (currentTool === 'pencil') {
         drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness);
       }
-    });
-  });
+    }
+  );
 
-  // 🌟 Toggle drawing mode
   setupToggleDrawing(toggleBtn, canvas, () => drawingEnabled, (val) => {
     drawingEnabled = val;
     if (drawingEnabled) {
@@ -71,9 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   setActiveTool(currentTool);
-  document.querySelector('.thickness-dot[data-size="2"]').classList.add('selected');
 
-  // 🔱 Draggable Toolbar
+  // 🟦 Draggable Toolbar
   const toolbar = document.getElementById('toolbar');
   let isDragging = false, offsetX = 0, offsetY = 0;
 
@@ -98,18 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
     toolbar.style.opacity = '1';
   });
 
-  // 👁️ Hamburger Toggle Logic
-  const hamburgerBtn = document.getElementById('hamburgerToggle');
-  const eyeIcon = document.getElementById('eyeIcon');
-  let toolbarVisible = true;
-
-  hamburgerBtn.addEventListener('click', () => {
-    toolbarVisible = !toolbarVisible;
-    toolbar.style.display = toolbarVisible ? 'flex' : 'none';
-    if (eyeIcon) {
-      eyeIcon.src = toolbarVisible
-        ? './scripts/images/eye.png'
-        : './scripts/images/close.png';
-    }
-  });
+  // 👁️ Setup Hamburger Menu Toggle
+  setupMenuToggle('toolbar', 'hamburgerToggle', './scripts/images/eye.png', './scripts/images/close.png');
 });

@@ -114,3 +114,37 @@ canvas.disabled {
   border-color: #00bcd4;
   background-color: #00bcd4;
 }
+
+
+.thickness-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0;
+}
+
+.thickness-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.thickness-selector.collapsed .thickness-dot:not(:first-child) {
+  display: none;
+}
+
+.thickness-dot {
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #999;
+  transition: transform 0.2s;
+}
+
+.thickness-dot:hover {
+  transform: scale(1.2);
+}

@@ -24,11 +24,30 @@
         <img src="./scripts/images/eraser.png" alt="Eraser" />
       </button>
 
-      <div class="thickness-options">
-        <button class="thickness-dot" data-size="2" title="Thin"></button>
-        <button class="thickness-dot" data-size="4" title="Medium"></button>
-        <button class="thickness-dot" data-size="8" title="Thick"></button>
-        <button class="thickness-dot" data-size="14" title="Extra Thick"></button>
+      <!-- Dot Thickness Control -->
+      <div class="thickness-wrapper">
+        <div id="thicknessSelector" class="thickness-selector collapsed">
+          <div
+            class="thickness-dot"
+            data-size="2"
+            style="width: 4px; height: 4px"
+          ></div>
+          <div
+            class="thickness-dot"
+            data-size="4"
+            style="width: 8px; height: 8px"
+          ></div>
+          <div
+            class="thickness-dot"
+            data-size="6"
+            style="width: 12px; height: 12px"
+          ></div>
+          <div
+            class="thickness-dot"
+            data-size="8"
+            style="width: 16px; height: 16px"
+          ></div>
+        </div>
       </div>
 
       <button id="clearBtn" class="tool-button" title="Clear">
