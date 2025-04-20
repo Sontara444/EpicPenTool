@@ -6,6 +6,7 @@ import { setupMenuToggle } from "./menu.js";
 import { createUndoManager } from "./undo.js";
 import { setupColorPicker } from "./colorpicker.js";
 
+
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
   canvas.width = window.innerWidth;

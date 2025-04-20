@@ -30,10 +30,10 @@ canvas.disabled {
   left: 30px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 8px; /* Reduced gap between tools */
   background-color: #ffffffcc;
-  padding: 10px;
-  border-radius: 20px;
+  padding: 8px; /* Reduced padding */
+  border-radius: 8px; /* Slightly smaller border radius */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   cursor: grab;
@@ -43,11 +43,10 @@ canvas.disabled {
 }
 
 .tool-button {
-  width: 52px;
-  height: 52px;
-  background-color: #ffffff;
+  width: 42px; /* Smaller button width */
+  height: 42px; /* Smaller button height */
   border: none;
-  border-radius: 14px;
+  border-radius: 4px;
   transition: background-color 0.3s ease, transform 0.2s ease;
   display: flex;
   align-items: center;
@@ -56,8 +55,8 @@ canvas.disabled {
 }
 
 .tool-button img {
-  width: 60%;
-  height: 60%;
+  width: 80%; /* Make the icon bigger inside the button */
+  height: 80%; /* Make the icon bigger inside the button */
   object-fit: contain;
   filter: grayscale(100%);
   transition: filter 0.3s ease;
@@ -91,16 +90,18 @@ canvas.disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 4px 0;
+  margin: 2px;
+  background-color: rgb(249, 242, 242);
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .thickness-selector {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.2);
+  gap: 6px; /* Reduced gap */
   border-radius: 20px;
-  padding: 4px;
+  padding: 14px auto;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -110,9 +111,9 @@ canvas.disabled {
 }
 
 .thickness-dot {
-  background-color: #fff;
+  background-color: black;
   border-radius: 50%;
-  border: 1px solid #999;
+  border: 2px solid black;
   transition: transform 0.2s;
 }
 
@@ -124,61 +125,64 @@ canvas.disabled {
 .color-picker-box {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 4 equal columns */
-  /* margin-bottom: 10px; */
+  gap: 6px; /* Add a slight gap between color boxes */
 }
-
 
 /* Individual Color Box (Small, 4 Color Palette) */
 .color-box {
-  width: 20px;
-  height: 20px;
-  border-radius: 2px;
-  border: 2px solid #ffffff;
+  width: 18px; /* Smaller size */
+  height: 18px;
+  border-radius: 4px; /* Slightly rounded corners for a softer look */
+  border: none; /* Remove extra borders */
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for effect */
 }
 
 /* Hover Effect on Color Box */
 .color-box:hover {
   transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15); /* Increase shadow on hover */
 }
-
-
 
 /* Custom Color Picker (Smaller Size) */
 .custom-color-picker {
-  width: 30px;
-  height: 30px;
+  width: 28px; /* Custom size */
+  height: 28px;
   border: none;
   border-radius: 6px;
   background-color: transparent;
   cursor: pointer;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
+/* Hover Effect on Custom Color Picker */
 .custom-color-picker:hover {
   transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Slightly more prominent shadow */
 }
 
 /* Input Field for Custom Color */
 #colorPicker {
-  width: 52px;
-  height: 52px;
-  border: 2px solid #ddd;
+  width: 48px; /* Adjusted size */
+  height: 48px;
+  border: none; /* Remove extra border */
   border-radius: 6px;
   background-color: transparent;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
+/* Hover Effect on Color Picker Input */
 #colorPicker:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 12px rgba(0, 188, 212, 0.5);
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(0, 188, 212, 0.5); /* Colorful shadow on hover */
 }
 
 #colorPicker:focus {
   outline: none;
-  border-color: #00bcd4;
-  box-shadow: 0 0 10px rgba(0, 188, 212, 0.8);
+  box-shadow: 0 0 10px rgba(0, 188, 212, 0.8); /* Blue glow on focus */
+  background-color: #f7f7f7; /* Slight background change on focus */
 }
