@@ -32,7 +32,7 @@ canvas.disabled {
   flex-direction: column;
   gap: 14px;
   background-color: #ffffffcc;
-  padding: 14px;
+  padding: 10px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   z-index: 9999;
@@ -87,35 +87,6 @@ canvas.disabled {
   box-shadow: 0 4px 16px rgba(255, 68, 68, 0.4);
 }
 
-.thickness-options {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin: 6px 0;
-}
-
-.thickness-dot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid #999;
-  background-color: #444;
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.thickness-dot:hover {
-  background-color: #000;
-  transform: scale(1.2);
-}
-
-.thickness-dot.selected {
-  border-color: #00bcd4;
-  background-color: #00bcd4;
-}
-
-
 .thickness-wrapper {
   display: flex;
   align-items: center;
@@ -147,4 +118,67 @@ canvas.disabled {
 
 .thickness-dot:hover {
   transform: scale(1.2);
+}
+
+/* Color Picker Box with Four Colors */
+.color-picker-box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 4 equal columns */
+  /* margin-bottom: 10px; */
+}
+
+
+/* Individual Color Box (Small, 4 Color Palette) */
+.color-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+/* Hover Effect on Color Box */
+.color-box:hover {
+  transform: scale(1.2);
+}
+
+
+
+/* Custom Color Picker (Smaller Size) */
+.custom-color-picker {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.custom-color-picker:hover {
+  transform: scale(1.2);
+}
+
+/* Input Field for Custom Color */
+#colorPicker {
+  width: 52px;
+  height: 52px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#colorPicker:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 12px rgba(0, 188, 212, 0.5);
+}
+
+#colorPicker:focus {
+  outline: none;
+  border-color: #00bcd4;
+  box-shadow: 0 0 10px rgba(0, 188, 212, 0.8);
 }
