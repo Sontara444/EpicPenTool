@@ -27,7 +27,6 @@
       <button id="textBtn" class="tool-button" title="Text">
         <img src="./scripts/images/text.png" alt="Text Tool" />
       </button>
-      
 
       <!-- Dot Thickness Control -->
       <div class="thickness-wrapper">
@@ -59,21 +58,41 @@
         <img src="./scripts/images/undo.png" alt="Undo" />
       </button>
 
-     <!-- Color Picker Box with Four Colors -->
-<div class="color-picker-box">
-  <div class="color-box" style="background-color: #ff0000;" title="Red"></div>
-  <div class="color-box" style="background-color: #00ff00;" title="Green"></div>
-  <div class="color-box" style="background-color: #0000ff;" title="Blue"></div>
-  <div class="color-box" style="background-color: #ffff00;" title="Yellow"></div>
-</div>
-
-<!-- Custom Color Picker -->
-<input type="color" id="colorPicker" value="#000000" title="Pick a color">
-
-
       <button id="clearBtn" class="tool-button" title="Clear">
         <img src="./scripts/images/clear.png" alt="Clear" />
       </button>
+
+      <!-- Color Picker Box with Four Colors -->
+      <div class="color-picker-box">
+        <div
+          class="color-box"
+          style="background-color: #ff0000"
+          title="Red"
+        ></div>
+        <div
+          class="color-box"
+          style="background-color: #00ff00"
+          title="Green"
+        ></div>
+        <div
+          class="color-box"
+          style="background-color: #0000ff"
+          title="Blue"
+        ></div>
+        <div
+          class="color-box"
+          style="background-color: #ffff00"
+          title="Yellow"
+        ></div>
+      </div>
+
+      <!-- Custom Color Picker -->
+      <input
+        type="color"
+        id="colorPicker"
+        value="#000000"
+        title="Pick a color"
+      />
     </div>
 
     <script type="module" src="./scripts/renderer.js"></script>
