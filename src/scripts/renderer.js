@@ -5,6 +5,8 @@ import { setupThicknessControl } from "./thickness.js";
 import { setupMenuToggle } from "./menu.js";
 import { createUndoManager } from "./undo.js";
 import { setupColorPicker } from "./colorpicker.js";
+import { setupShapesTool, drawShape, setShapeType } from "./shapes.js";
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -17,6 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let drawingEnabled = true;
   let pencilThickness = 2;
   let pencilColor = "blue"; // Default color
+  let shapeType = "rectangle";
+
+
 
   const toggleBtn = document.getElementById("toggleBtn");
   const pencilBtn = document.getElementById("pencilBtn");
@@ -25,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const undoBtn = document.getElementById("undoBtn");
   const toolButtons = document.querySelectorAll(".tool-button");
   const thicknessDots = document.querySelectorAll(".thickness-dot");
+  const shapesBtn = document.getElementById("shapesBtn");
+  
 
   const undoManager = createUndoManager(elements, () => drawHandlers.redraw());
 
@@ -36,7 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
     toolButtons.forEach((btn) => btn.classList.remove("active"));
     if (tool === "pencil") pencilBtn.classList.add("active");
     if (tool === "eraser") eraserBtn.classList.add("active");
+    if (tool === "shapes") shapesBtn.classList.add("active");
   }
+  
 
   pencilBtn.addEventListener("click", () => {
     if (!drawingEnabled) return;
@@ -62,6 +71,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!drawingEnabled) return;
     undoManager.undo();
   });
+
+  shapesBtn.addEventListener("click", () => {
+    if (!drawingEnabled) return;
+    currentTool = "shapes";
+    window.activeTool = "shapes";
+    setActiveTool("shapes");
+    setShapeType(shapeType); // default: rectangle
+  });
+  
 
   setupThicknessControl(
     thicknessDots,
