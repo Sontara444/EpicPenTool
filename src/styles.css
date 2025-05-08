@@ -102,7 +102,7 @@ canvas.disabled {
 .thickness-dot {
   background-color: black;
   border-radius: 50%;
-  border: 7px solid black;
+  border: 5px solid black;
   transition: transform 0.2s;
 }
 

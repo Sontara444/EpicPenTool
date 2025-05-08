@@ -1,5 +1,3 @@
-import { drawShape } from "./shapes.js"; // 👈 Make sure to import this
-
 export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, color = "#000000") {
   const ctx = canvas.getContext('2d');
   let drawing = false;
@@ -7,7 +5,6 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
   let stateSaved = false;
 
   function startDrawing(e) {
-    if (window.activeTool !== "pencil") return;
     drawing = true;
     stateSaved = false;
     currentPath = [];
@@ -20,10 +17,10 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
   }
 
   function draw(e) {
-    if (!drawing || window.activeTool !== "pencil") return;
+    if (!drawing) return;
 
     if (!stateSaved && undoManager?.saveState) {
-      undoManager.saveState(); // Save once per stroke
+      undoManager.saveState(); // Save the first time movement happens
       stateSaved = true;
     }
 
@@ -31,7 +28,7 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
     const y = e.clientY - canvas.offsetTop;
     ctx.lineWidth = thickness;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = color;
+    ctx.strokeStyle = color; // Use the selected color
     ctx.lineTo(x, y);
     ctx.stroke();
     currentPath.push({ x, y });
@@ -63,14 +60,12 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
         if (element.type === 'line') {
           ctx.beginPath();
           ctx.lineWidth = element.thickness || 2;
-          ctx.strokeStyle = element.color || "#000000";
+          ctx.strokeStyle = element.color || "#000000"; // Use stored color
           element.points.forEach((point, index) => {
             if (index === 0) ctx.moveTo(point.x, point.y);
             else ctx.lineTo(point.x, point.y);
           });
           ctx.stroke();
-        } else if (element.tool === 'shapes') {
-          drawShape(ctx, element); // ✅ draw shapes too
         }
       });
     }
