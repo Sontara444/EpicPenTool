@@ -8,6 +8,7 @@ import { setupColorPicker } from "./colorpicker.js";
 
 
 
+
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
   canvas.width = window.innerWidth;
@@ -107,35 +108,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setActiveTool(currentTool);
 
-  // 🟦 Draggable Toolbar
-  const toolbar = document.getElementById("toolbar");
-  let isDragging = false,
-    offsetX = 0,
-    offsetY = 0;
-
-  toolbar.addEventListener("mousedown", (e) => {
-    if (
-      !e.target.closest("button") &&
-      !e.target.closest(".thickness-wrapper")
-    ) {
+    // 🟦 Draggable Toolbar (Improved)
+    const toolbar = document.getElementById("toolbar");
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+  
+    toolbar.style.position = "absolute";
+  
+    toolbar.addEventListener("mousedown", (e) => {
+      if (
+        e.target.closest("button") ||
+        e.target.closest("input") ||
+        e.target.closest(".thickness-wrapper")
+      ) return;
+  
       isDragging = true;
-      offsetX = e.clientX - toolbar.offsetLeft;
-      offsetY = e.clientY - toolbar.offsetTop;
+  
+      const rect = toolbar.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+  
       toolbar.style.opacity = "0.9";
-    }
-  });
-
-  document.addEventListener("mousemove", (e) => {
-    if (isDragging) {
+      document.body.style.userSelect = "none";
+    });
+  
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
       toolbar.style.left = `${e.clientX - offsetX}px`;
       toolbar.style.top = `${e.clientY - offsetY}px`;
-    }
-  });
+    });
+  
+    document.addEventListener("mouseup", () => {
+      if (!isDragging) return;
+      isDragging = false;
+      toolbar.style.opacity = "1";
+      document.body.style.userSelect = "auto";
+    });
+  
 
-  document.addEventListener("mouseup", () => {
-    isDragging = false;
-    toolbar.style.opacity = "1";
-  });
+
 
   // 👁️ Hamburger Menu Toggle
   setupMenuToggle(

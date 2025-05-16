@@ -29,13 +29,16 @@ const createWindow = () => {
   });
 
   ipcMain.on('toggle-drawing-mode', (event, drawingEnabled) => {
-    mainWindow.setIgnoreMouseEvents(!drawingEnabled, { forward: true });
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      if (drawingEnabled) {
+        mainWindow.setIgnoreMouseEvents(false);
+      } else {
+        mainWindow.setIgnoreMouseEvents(true, { forward: true });
+      }
+    }
   });
+  
 };
-
-
-
-
 
 app.whenReady().then(createWindow);
 

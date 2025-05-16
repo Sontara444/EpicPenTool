@@ -18,6 +18,7 @@ export function setupToggleDrawing(toggleBtn, canvas, getDrawingEnabled, setDraw
 
     // 👇 Tell main process to ignore mouse events
     ipcRenderer.send('toggle-drawing-mode', drawingEnabled);
+
   });
 
   // 🟢 Initial UI sync

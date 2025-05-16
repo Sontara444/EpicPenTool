@@ -165,3 +165,21 @@ canvas.disabled {
   box-shadow: 0 0 10px rgba(0, 188, 212, 0.8);
   background-color: #f7f7f7;
 }
+
+
+.toggle-on {
+  background-color: green;
+}
+.toggle-off {
+  background-color: red;
+}
+.disabled {
+  opacity: 0.5;
+}
+
+#toolbar {
+  position: absolute;
+  z-index: 10000;
+  pointer-events: auto; /* This ensures the toolbar can still get mouse events */
+}
+
