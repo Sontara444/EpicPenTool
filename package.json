@@ -1,0 +1,23 @@
+{
+  "name": "epic-pen",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "nodemon --exec electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "canvas": "^3.1.0",
+    "electron-is-dev": "^3.0.1",
+    "electron-store": "^10.0.1"
+  },
+  "devDependencies": {
+    "electron": "^35.0.3",
+    "nodemon": "^3.1.9"
+  }
+}

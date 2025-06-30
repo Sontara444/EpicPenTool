@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drawing App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+
+    <div class="toolbar" id="toolbar">
+      <div
+        id="dragArea"
+        style="cursor: move; height: 10px; background-color: #ccc"
+      ></div>
+
+      <!-- ✅ Eye Toggle (keep .blue) -->
+      <button
+        id="hamburgerToggle"
+        class="tool-button blue"
+        title="Toggle Toolbar"
+      >
+        <img src="./scripts/images/eye.png" alt="Eye Toggle" />
+      </button>
+
+      <!-- ✅ Toggle Mode (keep .blue + .active) -->
+      <button
+        id="toggleBtn"
+        class="tool-button blue active toggle-on"
+        title="Toggle Mode"
+      >
+        <img src="./scripts/images/arrow.png" alt="Toggle" />
+      </button>
+
+      <!-- ❌ Pencil Button: remove .blue -->
+      <button id="pencilBtn" class="tool-button" title="Pencil">
+        <img src="./scripts/images/pencil.png" alt="Pencil" />
+      </button>
+
+      <button id="shapesBtn" class="tool-button" title="Shapes">
+        <img src="./scripts/images/line.png" alt="Shapes Tool" />
+      </button>
+
+      <button id="eraserBtn" class="tool-button" title="Eraser">
+        <img src="./scripts/images/eraser.png" alt="Eraser" />
+      </button>
+
+      <div class="thickness-wrapper">
+        <div id="thicknessSelector" class="thickness-selector collapsed">
+          <div
+            class="thickness-dot"
+            data-size="2"
+            style="width: 4px; height: 4px"
+          ></div>
+          <div
+            class="thickness-dot"
+            data-size="4"
+            style="width: 8px; height: 8px"
+          ></div>
+          <div
+            class="thickness-dot"
+            data-size="6"
+            style="width: 12px; height: 12px"
+          ></div>
+          <div
+            class="thickness-dot"
+            data-size="8"
+            style="width: 16px; height: 16px"
+          ></div>
+        </div>
+      </div>
+
+      <button id="undoBtn" class="tool-button" title="Undo">
+        <img src="./scripts/images/undo.png" alt="Undo" />
+      </button>
+
+      <button id="clearBtn" class="tool-button" title="Clear">
+        <img src="./scripts/images/clear.png" alt="Clear" />
+      </button>
+
+      <div class="color-picker-box">
+        <div
+          class="color-box"
+          style="background-color: #ff0000"
+          title="Red"
+        ></div>
+        <div
+          class="color-box"
+          style="background-color: #00ff00"
+          title="Green"
+        ></div>
+        <div
+          class="color-box"
+          style="background-color: #0000ff"
+          title="Blue"
+        ></div>
+        <div
+          class="color-box"
+          style="background-color: #ffff00"
+          title="Yellow"
+        ></div>
+      </div>
+
+      <input
+        type="color"
+        id="colorPicker"
+        value="#000000"
+        title="Pick a color"
+      />
+    </div>
+
+    <script type="module" src="./scripts/renderer.js"></script>
+  </body>
+</html>
