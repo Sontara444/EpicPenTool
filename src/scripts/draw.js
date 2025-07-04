@@ -4,7 +4,8 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
   let currentPath = [];
   let stateSaved = false;
 
-  function startDrawing(e) {
+  const startDrawing = (e) => {
+    if (canvas.classList.contains('disabled')) return;
     drawing = true;
     stateSaved = false;
     currentPath = [];
@@ -14,13 +15,12 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
     ctx.beginPath();
     ctx.moveTo(x, y);
     currentPath.push({ x, y });
-  }
+  };
 
-  function draw(e) {
+  const draw = (e) => {
     if (!drawing) return;
-
     if (!stateSaved && undoManager?.saveState) {
-      undoManager.saveState(); // Save the first time movement happens
+      undoManager.saveState();
       stateSaved = true;
     }
 
@@ -28,22 +28,27 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
     const y = e.clientY - canvas.offsetTop;
     ctx.lineWidth = thickness;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = color; // Use the selected color
+    ctx.strokeStyle = color;
     ctx.lineTo(x, y);
     ctx.stroke();
     currentPath.push({ x, y });
-  }
+  };
 
-  function stopDrawing() {
+  const stopDrawing = () => {
     if (drawing && currentPath.length > 1) {
       elements.push({ type: 'line', points: [...currentPath], thickness, color });
     }
     drawing = false;
-  }
+  };
 
-  canvas.removeEventListener('mousedown', startDrawing);
-  canvas.removeEventListener('mousemove', draw);
-  canvas.removeEventListener('mouseup', stopDrawing);
+  // ✅ Remove existing listeners before adding new ones
+  canvas.removeEventListener('mousedown', canvas._startDraw);
+  canvas.removeEventListener('mousemove', canvas._drawMove);
+  canvas.removeEventListener('mouseup', canvas._stopDraw);
+
+  canvas._startDraw = startDrawing;
+  canvas._drawMove = draw;
+  canvas._stopDraw = stopDrawing;
 
   canvas.addEventListener('mousedown', startDrawing);
   canvas.addEventListener('mousemove', draw);
@@ -56,11 +61,11 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
     },
     redraw: () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      elements.forEach(element => {
+      elements.forEach((element) => {
         if (element.type === 'line') {
           ctx.beginPath();
           ctx.lineWidth = element.thickness || 2;
-          ctx.strokeStyle = element.color || "#000000"; // Use stored color
+          ctx.strokeStyle = element.color || "#000000";
           element.points.forEach((point, index) => {
             if (index === 0) ctx.moveTo(point.x, point.y);
             else ctx.lineTo(point.x, point.y);

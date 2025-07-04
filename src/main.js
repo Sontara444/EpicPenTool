@@ -1,7 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
-// ✅ Fix: Redirect userData and disable GPU shader disk cache
 app.setPath('userData', path.join(__dirname, 'electron-user-data'));
 app.commandLine.appendSwitch('disable-gpu-shader-disk-cache');
 
@@ -28,6 +27,7 @@ const createWindow = () => {
     mainWindow = null;
   });
 
+  // ✅ Safely toggle pointer behavior
   ipcMain.on('toggle-drawing-mode', (event, drawingEnabled) => {
     if (mainWindow && !mainWindow.isDestroyed()) {
       if (drawingEnabled) {
@@ -37,7 +37,6 @@ const createWindow = () => {
       }
     }
   });
-  
 };
 
 app.whenReady().then(createWindow);

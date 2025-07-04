@@ -24,6 +24,13 @@ canvas.disabled {
   opacity: 0.4;
 }
 
+#toolbar {
+  pointer-events: auto;
+  -webkit-app-region: no-drag;
+  z-index: 10000;
+}
+
+
 .toolbar {
   position: fixed;
   top: 100px;

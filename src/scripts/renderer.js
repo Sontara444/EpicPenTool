@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
+  // ✅ Add logo to toolbar
   addToolbarLogo("toolbar", "./scripts/images/logo.png");
 
   const TOOLS = {
@@ -28,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let pencilThickness = 2;
   let pencilColor = "blue";
 
+  // ✅ Tool button elements
   const toggleBtn = document.getElementById("toggleBtn");
   const pencilBtn = document.getElementById("pencilBtn");
   const eraserBtn = document.getElementById("eraserBtn");
@@ -36,7 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const undoBtn = document.getElementById("undoBtn");
   const toolButtons = document.querySelectorAll(".tool-button");
 
+  // ✅ Undo manager
   const undoManager = createUndoManager(elements, () => drawHandlers.redraw());
+
+  // ✅ Set up drawing and erasing
   let drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness, undoManager, pencilColor);
   let eraseHandlers = setupEraseCanvas(canvas, elements, drawHandlers.redraw, undoManager);
 
@@ -48,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function handleToolClick(toolName, setupFn) {
-    disableDrawingExternally(toggleBtn, canvas, (v) => drawingEnabled = v);
     currentTool = toolName;
     setActiveTool(toolName);
 
@@ -59,26 +63,38 @@ document.addEventListener("DOMContentLoaded", () => {
       eraseHandlers = setupEraseCanvas(canvas, elements, drawHandlers.redraw, undoManager);
     }
 
-    setupFn?.(); // Run additional logic if provided
+    setupFn?.(); // Run custom logic if needed
   }
 
+  // ✅ Tool button event listeners
   pencilBtn.addEventListener("click", () => handleToolClick(TOOLS.PENCIL));
   eraserBtn.addEventListener("click", () => handleToolClick(TOOLS.ERASER));
   shapesBtn.addEventListener("click", () => handleToolClick(TOOLS.SHAPES));
+
   clearBtn.addEventListener("click", () => {
     handleToolClick(TOOLS.CLEAR, () => {
       undoManager.saveState();
       drawHandlers.clearCanvas();
     });
   });
+
   undoBtn.addEventListener("click", () => {
     handleToolClick(TOOLS.UNDO, () => {
       undoManager.undo();
     });
   });
 
+  // ✅ Setup toggle drawing mode (drawing enabled ON by default)
   setupToggleDrawing(toggleBtn, canvas, (val) => drawingEnabled = val);
 
+  // ✅ Force toolbar pointer access again (safety)
+  const toolbar = document.getElementById("toolbar");
+  if (toolbar) {
+    toolbar.style.pointerEvents = "auto";
+    toolbar.style.zIndex = "10000";
+  }
+
+  // ✅ Setup thickness dots
   setupThicknessControl(
     document.querySelectorAll(".thickness-dot"),
     () => currentTool,
@@ -90,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
+  // ✅ Setup color picker
   setupColorPicker(
     document.getElementById("colorPicker"),
     (selectedColor) => {
@@ -100,7 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
+  // ✅ Set initial tool
   setActiveTool(currentTool);
 
+  // ✅ Setup toolbar menu toggle (eye icon)
   setupMenuToggle("toolbar", "hamburgerToggle", "./scripts/images/eye.png", "./scripts/images/close.png");
 });
