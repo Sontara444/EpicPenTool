@@ -2,23 +2,16 @@ const { ipcRenderer } = require("electron");
 
 let internalDrawingEnabled = true;
 
-// ✅ Setup toggle button logic
 export function setupToggleDrawing(toggleBtn, canvas, setDrawingEnabled) {
   function updateToggleUI() {
-    toggleBtn.classList.add("tool-button");
-    toggleBtn.style.display = "flex";
-    toggleBtn.style.visibility = "visible";
-    toggleBtn.style.opacity = "1";
-    toggleBtn.style.zIndex = "10001";
-
-    const toolbar = document.getElementById("toolbar");
-    if (toolbar) toolbar.style.pointerEvents = "auto";
-
     toggleBtn.classList.toggle("toggle-on", internalDrawingEnabled);
     toggleBtn.classList.toggle("toggle-off", !internalDrawingEnabled);
 
-    canvas.classList.toggle("disabled", !internalDrawingEnabled);
     canvas.style.pointerEvents = internalDrawingEnabled ? "auto" : "none";
+    canvas.classList.toggle("disabled", !internalDrawingEnabled);
+
+    const toolbar = document.getElementById("toolbar");
+    if (toolbar) toolbar.style.pointerEvents = "auto";
   }
 
   toggleBtn.addEventListener("click", () => {
@@ -28,39 +21,28 @@ export function setupToggleDrawing(toggleBtn, canvas, setDrawingEnabled) {
     ipcRenderer.send("toggle-drawing-mode", internalDrawingEnabled);
   });
 
+  // Initial setup
   internalDrawingEnabled = true;
   setDrawingEnabled(true);
   updateToggleUI();
 }
 
-// ✅ Disable drawing externally
+// 🔹 Disable drawing externally (from other file)
 export function disableDrawingExternally(toggleBtn, canvas, setDrawingEnabled) {
   internalDrawingEnabled = false;
   setDrawingEnabled(false);
-  updateToggleUIState(toggleBtn, canvas, false);
+  canvas.style.pointerEvents = "none";
+  toggleBtn.classList.remove("toggle-on");
+  toggleBtn.classList.add("toggle-off");
   ipcRenderer.send("toggle-drawing-mode", false);
 }
 
-// ✅ Enable drawing externally (new function!)
+// 🔹 Enable drawing externally (from other file)
 export function enableDrawingExternally(toggleBtn, canvas, setDrawingEnabled) {
   internalDrawingEnabled = true;
   setDrawingEnabled(true);
-  updateToggleUIState(toggleBtn, canvas, true);
+  canvas.style.pointerEvents = "auto";
+  toggleBtn.classList.remove("toggle-off");
+  toggleBtn.classList.add("toggle-on");
   ipcRenderer.send("toggle-drawing-mode", true);
-}
-
-// 🔹 Helper for both enable/disable
-function updateToggleUIState(toggleBtn, canvas, isEnabled) {
-  toggleBtn.classList.toggle("toggle-on", isEnabled);
-  toggleBtn.classList.toggle("toggle-off", !isEnabled);
-  toggleBtn.style.display = "flex";
-  toggleBtn.style.visibility = "visible";
-  toggleBtn.style.opacity = "1";
-  toggleBtn.style.zIndex = "10001";
-
-  canvas.classList.toggle("disabled", !isEnabled);
-  canvas.style.pointerEvents = isEnabled ? "auto" : "none";
-
-  const toolbar = document.getElementById("toolbar");
-  if (toolbar) toolbar.style.pointerEvents = "auto";
 }

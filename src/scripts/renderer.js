@@ -1,6 +1,6 @@
 import { setupDrawCanvas } from "./draw.js";
 import { setupEraseCanvas } from "./eraser.js";
-import { setupToggleDrawing, disableDrawingExternally } from "./toggle.js";
+import { setupToggleDrawing, enableDrawingExternally } from "./toggle.js";
 import { setupThicknessControl } from "./thickness.js";
 import { setupMenuToggle } from "./menu.js";
 import { createUndoManager } from "./undo.js";
@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  // ✅ Add logo to toolbar
   addToolbarLogo("toolbar", "./scripts/images/logo.png");
 
   const TOOLS = {
@@ -29,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let pencilThickness = 2;
   let pencilColor = "blue";
 
-  // ✅ Tool button elements
   const toggleBtn = document.getElementById("toggleBtn");
   const pencilBtn = document.getElementById("pencilBtn");
   const eraserBtn = document.getElementById("eraserBtn");
@@ -38,10 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const undoBtn = document.getElementById("undoBtn");
   const toolButtons = document.querySelectorAll(".tool-button");
 
-  // ✅ Undo manager
   const undoManager = createUndoManager(elements, () => drawHandlers.redraw());
 
-  // ✅ Set up drawing and erasing
   let drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness, undoManager, pencilColor);
   let eraseHandlers = setupEraseCanvas(canvas, elements, drawHandlers.redraw, undoManager);
 
@@ -52,9 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (tool === TOOLS.SHAPES) shapesBtn.classList.add("active");
   }
 
+  // ✅ Automatically re-enable drawing when any tool is clicked
   function handleToolClick(toolName, setupFn) {
     currentTool = toolName;
     setActiveTool(toolName);
+
+    if (!drawingEnabled) {
+      enableDrawingExternally(toggleBtn, canvas, (val) => (drawingEnabled = val));
+    }
 
     if (toolName === TOOLS.PENCIL) {
       drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness, undoManager, pencilColor);
@@ -63,38 +64,30 @@ document.addEventListener("DOMContentLoaded", () => {
       eraseHandlers = setupEraseCanvas(canvas, elements, drawHandlers.redraw, undoManager);
     }
 
-    setupFn?.(); // Run custom logic if needed
+    setupFn?.();
   }
 
-  // ✅ Tool button event listeners
   pencilBtn.addEventListener("click", () => handleToolClick(TOOLS.PENCIL));
   eraserBtn.addEventListener("click", () => handleToolClick(TOOLS.ERASER));
   shapesBtn.addEventListener("click", () => handleToolClick(TOOLS.SHAPES));
 
-  clearBtn.addEventListener("click", () => {
+  clearBtn.addEventListener("click", () =>
     handleToolClick(TOOLS.CLEAR, () => {
       undoManager.saveState();
       drawHandlers.clearCanvas();
-    });
-  });
+    })
+  );
 
-  undoBtn.addEventListener("click", () => {
+  undoBtn.addEventListener("click", () =>
     handleToolClick(TOOLS.UNDO, () => {
       undoManager.undo();
-    });
-  });
+    })
+  );
 
-  // ✅ Setup toggle drawing mode (drawing enabled ON by default)
-  setupToggleDrawing(toggleBtn, canvas, (val) => drawingEnabled = val);
+  // ✅ Setup toggle (drawing on/off)
+  setupToggleDrawing(toggleBtn, canvas, (val) => (drawingEnabled = val));
 
-  // ✅ Force toolbar pointer access again (safety)
-  const toolbar = document.getElementById("toolbar");
-  if (toolbar) {
-    toolbar.style.pointerEvents = "auto";
-    toolbar.style.zIndex = "10000";
-  }
-
-  // ✅ Setup thickness dots
+  // ✅ Setup thickness
   setupThicknessControl(
     document.querySelectorAll(".thickness-dot"),
     () => currentTool,
@@ -117,9 +110,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
-  // ✅ Set initial tool
-  setActiveTool(currentTool);
-
-  // ✅ Setup toolbar menu toggle (eye icon)
+  // ✅ Menu (eye icon)
   setupMenuToggle("toolbar", "hamburgerToggle", "./scripts/images/eye.png", "./scripts/images/close.png");
+
+  setActiveTool(currentTool);
 });
