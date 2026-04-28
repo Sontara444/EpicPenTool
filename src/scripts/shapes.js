@@ -1,79 +1,82 @@
-// // scripts/shapes.js
-// let currentShape = "rectangle";
-// let isDrawing = false;
-// let startX, startY, ctx, canvas;
-// let elements, redraw, undoManager, shapeColor, shapeThickness;
+export function setupShapesTool(canvas, elements, redraw, undoManager, thickness, color) {
+  const ctx = canvas.getContext("2d");
+  let isDrawing = false;
+  let startX, startY;
 
-// export function setupShapesTool(canvasEl, allElements, onRedraw, undo, thickness, color) {
-//   canvas = canvasEl;
-//   ctx = canvas.getContext("2d");
-//   elements = allElements;
-//   redraw = onRedraw;
-//   undoManager = undo;
-//   shapeColor = color;
-//   shapeThickness = thickness;
+  function handleMouseDown(e) {
+    if (canvas.classList.contains('disabled')) return;
+    const rect = canvas.getBoundingClientRect();
+    startX = e.clientX - rect.left;
+    startY = e.clientY - rect.top;
+    isDrawing = true;
+  }
 
-//   canvas.addEventListener("mousedown", handleMouseDown);
-//   canvas.addEventListener("mouseup", handleMouseUp);
-// }
+  function handleMouseMove(e) {
+    if (!isDrawing) return;
+    const rect = canvas.getBoundingClientRect();
+    const currentX = e.clientX - rect.left;
+    const currentY = e.clientY - rect.top;
 
-// export function setShapeType(shape) {
-//   currentShape = shape;
-// }
+    redraw(); // Clear and redraw existing elements
+    
+    // Draw the temporary preview line
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.beginPath();
+    ctx.lineWidth = thickness;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = color;
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(currentX, currentY);
+    ctx.stroke();
+  }
 
-// function handleMouseDown(e) {
-//   if (!window.activeTool || window.activeTool !== "shapes") return;
-//   const rect = canvas.getBoundingClientRect();
-//   startX = e.clientX - rect.left;
-//   startY = e.clientY - rect.top;
-//   isDrawing = true;
-// }
+  function handleMouseUp(e) {
+    if (!isDrawing) return;
+    const rect = canvas.getBoundingClientRect();
+    const endX = e.clientX - rect.left;
+    const endY = e.clientY - rect.top;
 
-// function handleMouseUp(e) {
-//   if (!isDrawing || window.activeTool !== "shapes") return;
-//   const rect = canvas.getBoundingClientRect();
-//   const endX = e.clientX - rect.left;
-//   const endY = e.clientY - rect.top;
+    if (startX !== endX || startY !== endY) {
+      if (undoManager?.saveState) undoManager.saveState();
+      
+      const shape = {
+        type: "shape",
+        shapeType: "line",
+        x1: startX,
+        y1: startY,
+        x2: endX,
+        y2: endY,
+        color: color,
+        thickness: thickness
+      };
 
-//   undoManager.saveState();
+      elements.push(shape);
+    }
+    
+    redraw(); // Commit the drawing
+    isDrawing = false;
+  }
 
-//   const shape = {
-//     tool: "shapes",
-//     type: currentShape,
-//     x1: startX,
-//     y1: startY,
-//     x2: endX,
-//     y2: endY,
-//     color: shapeColor,
-//     thickness: shapeThickness
-//   };
+  if (canvas._shapesMouseDown) canvas.removeEventListener("mousedown", canvas._shapesMouseDown);
+  if (canvas._shapesMouseMove) canvas.removeEventListener("mousemove", canvas._shapesMouseMove);
+  if (canvas._shapesMouseUp) canvas.removeEventListener("mouseup", canvas._shapesMouseUp);
 
-//   elements.push(shape);
-//   redraw();
-//   isDrawing = false;
-// }
+  canvas._shapesMouseDown = handleMouseDown;
+  canvas._shapesMouseMove = handleMouseMove;
+  canvas._shapesMouseUp = handleMouseUp;
 
-// export function drawShape(ctx, shape) {
-//   ctx.strokeStyle = shape.color;
-//   ctx.lineWidth = shape.thickness;
-//   ctx.beginPath();
-//   const { x1, y1, x2, y2, type } = shape;
+  canvas.addEventListener("mousedown", handleMouseDown);
+  canvas.addEventListener("mousemove", handleMouseMove);
+  canvas.addEventListener("mouseup", handleMouseUp);
 
-//   switch (type) {
-//     case "rectangle":
-//       ctx.rect(x1, y1, x2 - x1, y2 - y1);
-//       break;
-//     case "circle":
-//       const radius = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-//       ctx.arc(x1, y1, radius, 0, 2 * Math.PI);
-//       break;
-//     case "triangle":
-//       ctx.moveTo(x1, y1);
-//       ctx.lineTo(x2, y2);
-//       ctx.lineTo(2 * x1 - x2, y2);
-//       ctx.closePath();
-//       break;
-//   }
-
-//   ctx.stroke();
-// }
+  return {
+    cleanup() {
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseup", handleMouseUp);
+      delete canvas._shapesMouseDown;
+      delete canvas._shapesMouseMove;
+      delete canvas._shapesMouseUp;
+    }
+  };
+}

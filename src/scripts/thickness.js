@@ -2,11 +2,6 @@ export function setupThicknessControl(dots, getTool, onSelectThickness) {
     const selector = document.getElementById('thicknessSelector');
     let isExpanded = false;
   
-    // Collapse initially
-    dots.forEach((dot, i) => {
-      if (i !== 0) dot.style.display = 'none';
-    });
-  
     selector.addEventListener('click', (e) => {
       const clickedDot = e.target.closest('.thickness-dot');
       if (!clickedDot) return;
@@ -16,7 +11,6 @@ export function setupThicknessControl(dots, getTool, onSelectThickness) {
       if (!isExpanded) {
         // Expand to show all
         selector.classList.remove('collapsed');
-        dots.forEach(dot => dot.style.display = 'inline-block');
         isExpanded = true;
         return;
       }
@@ -25,16 +19,11 @@ export function setupThicknessControl(dots, getTool, onSelectThickness) {
         // Apply thickness
         onSelectThickness(Number(size));
   
-        // Move clicked dot to first
-        const first = dots[0];
-        selector.insertBefore(clickedDot, first);
+        // Move clicked dot to first child in the DOM so it stays visible when collapsed
+        selector.insertBefore(clickedDot, selector.firstElementChild);
   
         // Collapse again
         selector.classList.add('collapsed');
-        dots.forEach((dot, i) => {
-          dot.style.display = i === 0 ? 'inline-block' : 'none';
-        });
-  
         isExpanded = false;
       }
     });

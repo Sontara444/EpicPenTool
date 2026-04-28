@@ -1,5 +1,3 @@
-const { ipcRenderer } = require("electron");
-
 let internalDrawingEnabled = true;
 
 export function setupToggleDrawing(toggleBtn, canvas, setDrawingEnabled) {
@@ -18,7 +16,7 @@ export function setupToggleDrawing(toggleBtn, canvas, setDrawingEnabled) {
     internalDrawingEnabled = !internalDrawingEnabled;
     setDrawingEnabled(internalDrawingEnabled);
     updateToggleUI();
-    ipcRenderer.send("toggle-drawing-mode", internalDrawingEnabled);
+    window.electronAPI.toggleDrawingMode(internalDrawingEnabled);
   });
 
   // Initial setup
@@ -27,22 +25,23 @@ export function setupToggleDrawing(toggleBtn, canvas, setDrawingEnabled) {
   updateToggleUI();
 }
 
-// 🔹 Disable drawing externally (from other file)
-export function disableDrawingExternally(toggleBtn, canvas, setDrawingEnabled) {
-  internalDrawingEnabled = false;
-  setDrawingEnabled(false);
-  canvas.style.pointerEvents = "none";
-  toggleBtn.classList.remove("toggle-on");
-  toggleBtn.classList.add("toggle-off");
-  ipcRenderer.send("toggle-drawing-mode", false);
-}
-
-// 🔹 Enable drawing externally (from other file)
-export function enableDrawingExternally(toggleBtn, canvas, setDrawingEnabled) {
-  internalDrawingEnabled = true;
-  setDrawingEnabled(true);
-  canvas.style.pointerEvents = "auto";
-  toggleBtn.classList.remove("toggle-off");
-  toggleBtn.classList.add("toggle-on");
-  ipcRenderer.send("toggle-drawing-mode", true);
+export function setDrawingMode(enable, buttonElement, canvasElement, callback) {
+  if (enable) {
+    buttonElement.classList.add("active", "toggle-on");
+    buttonElement.classList.remove("toggle-off");
+    canvasElement.classList.remove("disabled");
+    canvasElement.style.pointerEvents = "auto";
+    if (window.electronAPI) {
+      window.electronAPI.toggleDrawingMode(true);
+    }
+  } else {
+    buttonElement.classList.add("toggle-off");
+    buttonElement.classList.remove("active", "toggle-on");
+    canvasElement.classList.add("disabled");
+    canvasElement.style.pointerEvents = "none";
+    if (window.electronAPI) {
+      window.electronAPI.toggleDrawingMode(false);
+    }
+  }
+  callback(enable);
 }

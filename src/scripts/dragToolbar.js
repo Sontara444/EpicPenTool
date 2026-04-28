@@ -1,7 +1,5 @@
-// dragToolbar.js
-export function setupDraggableToolbar(toolbarId, dragAreaId) {
+export async function setupDraggableToolbar(toolbarId) {
     const toolbar = document.getElementById(toolbarId);
-    const dragArea = document.getElementById(dragAreaId);
   
     let isDragging = false;
     let offsetX = 0;
@@ -9,7 +7,18 @@ export function setupDraggableToolbar(toolbarId, dragAreaId) {
   
     toolbar.style.position = "absolute";
   
-    dragArea.addEventListener("mousedown", (e) => {
+    const savedPos = await window.electronAPI.storeGet('toolbarPosition');
+    if (savedPos) {
+      toolbar.style.left = savedPos.x;
+      toolbar.style.top = savedPos.y;
+    }
+  
+    toolbar.addEventListener("mousedown", (e) => {
+      // Exclude interactive elements from triggering drag
+      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('.thickness-selector') || e.target.closest('.color-picker-box')) {
+        return;
+      }
+      
       isDragging = true;
       const rect = toolbar.getBoundingClientRect();
       offsetX = e.clientX - rect.left;
@@ -29,6 +38,10 @@ export function setupDraggableToolbar(toolbarId, dragAreaId) {
       isDragging = false;
       toolbar.style.opacity = "1";
       document.body.style.userSelect = "auto";
+      window.electronAPI.storeSet('toolbarPosition', {
+        x: toolbar.style.left,
+        y: toolbar.style.top
+      });
     });
   }
   

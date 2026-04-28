@@ -1,4 +1,4 @@
-export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, color = "#000000") {
+export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, color = "#000000", isHighlighter = false) {
   const ctx = canvas.getContext('2d');
   let drawing = false;
   let currentPath = [];
@@ -27,8 +27,12 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
     const x = e.clientX - canvas.offsetLeft;
     const y = e.clientY - canvas.offsetTop;
     ctx.lineWidth = thickness;
-    ctx.lineCap = 'round';
+    ctx.lineCap = isHighlighter ? 'butt' : 'round'; // Butt looks more like a marker
     ctx.strokeStyle = color;
+    ctx.globalAlpha = isHighlighter ? 0.4 : 1.0;
+    
+    // If it's a highlighter, we don't want the stroke to compound heavily on itself during the live draw,
+    // but the standard way is fine for now.
     ctx.lineTo(x, y);
     ctx.stroke();
     currentPath.push({ x, y });
@@ -36,9 +40,10 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
 
   const stopDrawing = () => {
     if (drawing && currentPath.length > 1) {
-      elements.push({ type: 'line', points: [...currentPath], thickness, color });
+      elements.push({ type: isHighlighter ? 'highlight' : 'line', points: [...currentPath], thickness, color });
     }
     drawing = false;
+    ctx.globalAlpha = 1.0; // Reset
   };
 
   // ✅ Remove existing listeners before adding new ones
@@ -62,17 +67,40 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
     redraw: () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       elements.forEach((element) => {
-        if (element.type === 'line') {
+        ctx.globalAlpha = element.type === 'highlight' ? 0.4 : 1.0;
+        
+        if (element.type === 'line' || element.type === 'erase' || element.type === 'highlight') {
+          ctx.globalCompositeOperation = element.type === 'erase' ? 'destination-out' : 'source-over';
           ctx.beginPath();
           ctx.lineWidth = element.thickness || 2;
-          ctx.strokeStyle = element.color || "#000000";
+          ctx.lineCap = element.type === 'highlight' ? 'butt' : 'round';
+          ctx.strokeStyle = element.type === 'erase' ? 'rgba(0,0,0,1)' : (element.color || "#000000");
           element.points.forEach((point, index) => {
             if (index === 0) ctx.moveTo(point.x, point.y);
             else ctx.lineTo(point.x, point.y);
           });
           ctx.stroke();
+        } else if (element.type === 'shape') {
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.beginPath();
+          ctx.lineWidth = element.thickness || 2;
+          ctx.lineCap = 'round';
+          ctx.strokeStyle = element.color || "#000000";
+          if (element.shapeType === 'line') {
+            ctx.moveTo(element.x1, element.y1);
+            ctx.lineTo(element.x2, element.y2);
+          }
+          ctx.stroke();
         }
       });
+      ctx.globalCompositeOperation = 'source-over'; // Reset back to normal
+      ctx.globalAlpha = 1.0; // Reset
+    },
+    cleanup: () => {
+      canvas.removeEventListener('mousedown', startDrawing);
+      canvas.removeEventListener('mousemove', draw);
+      canvas.removeEventListener('mouseup', stopDrawing);
+      ctx.globalAlpha = 1.0; // Reset
     }
   };
 }

@@ -1,85 +1,72 @@
-export function setupEraseCanvas(canvas, elements, redraw, saveState) {
+export function setupEraseCanvas(canvas, elements, redraw, undoManager, eraserSize = 20) {
   const ctx = canvas.getContext("2d");
-  const eraserSize = 20; // Size of the eraser
   let isErasing = false;
+  let currentPath = [];
+  let stateSaved = false;
 
-  function erase(event) {
-    if (!isErasing) return;
-
-    const mouseX = event.clientX - canvas.offsetLeft;
-    const mouseY = event.clientY - canvas.offsetTop;
-
-    const elementsToRemove = [];
-
-    // Check which elements are within the eraser area
-    elements.forEach((element) => {
-      if (element.type === "line") {
-        for (let i = 0; i < element.points.length - 1; i++) {
-          const p1 = element.points[i];
-          const p2 = element.points[i + 1];
-
-          if (
-            isPointNearLine(
-              mouseX,
-              mouseY,
-              p1.x,
-              p1.y,
-              p2.x,
-              p2.y,
-              eraserSize
-            )
-          ) {
-            elementsToRemove.push(element);
-            break;
-          }
-        }
-      }
-    });
-
-    // Remove detected elements (mutate original array)
-    if (elementsToRemove.length > 0) {
-      if (saveState) saveState(); // Save before modifying
-      elements.splice(
-        0,
-        elements.length,
-        ...elements.filter((el) => !elementsToRemove.includes(el))
-      );
-      redraw();
-    }
-  }
-
-  function isPointNearLine(px, py, x1, y1, x2, y2, threshold) {
-    const lineLength = Math.hypot(x2 - x1, y2 - y1);
-    if (lineLength === 0) return false;
-    const distanceToLine =
-      Math.abs((y2 - y1) * px - (x2 - x1) * py + x2 * y1 - y2 * x1) /
-      lineLength;
-    return distanceToLine < threshold;
-  }
-
-  // Clean up old listeners
-  canvas.removeEventListener("mousedown", handleMouseDown);
-  canvas.removeEventListener("mouseup", handleMouseUp);
-  canvas.removeEventListener("mousemove", erase);
-
-  function handleMouseDown(e) {
+  const startErasing = (e) => {
+    if (canvas.classList.contains('disabled')) return;
     isErasing = true;
-    erase(e);
-  }
+    stateSaved = false;
+    currentPath = [];
 
-  function handleMouseUp() {
+    const x = e.clientX - canvas.offsetLeft;
+    const y = e.clientY - canvas.offsetTop;
+    
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    currentPath.push({ x, y });
+  };
+
+  const erase = (e) => {
+    if (!isErasing) return;
+    
+    if (!stateSaved && undoManager?.saveState) {
+      undoManager.saveState();
+      stateSaved = true;
+    }
+
+    const x = e.clientX - canvas.offsetLeft;
+    const y = e.clientY - canvas.offsetTop;
+    
+    ctx.lineWidth = eraserSize;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = 'rgba(0,0,0,1)';
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    currentPath.push({ x, y });
+  };
+
+  const stopErasing = () => {
+    if (isErasing && currentPath.length > 1) {
+      elements.push({ type: 'erase', points: [...currentPath], thickness: eraserSize });
+    }
     isErasing = false;
-  }
+    ctx.globalCompositeOperation = 'source-over'; // Reset to normal drawing
+  };
 
-  canvas.addEventListener("mousedown", handleMouseDown);
-  canvas.addEventListener("mouseup", handleMouseUp);
+  if (canvas._eraseMouseDown) canvas.removeEventListener("mousedown", canvas._eraseMouseDown);
+  if (canvas._eraseMouseUp) canvas.removeEventListener("mouseup", canvas._eraseMouseUp);
+  if (canvas._eraseMouseMove) canvas.removeEventListener("mousemove", canvas._eraseMouseMove);
+
+  canvas._eraseMouseDown = startErasing;
+  canvas._eraseMouseUp = stopErasing;
+  canvas._eraseMouseMove = erase;
+
+  canvas.addEventListener("mousedown", startErasing);
+  canvas.addEventListener("mouseup", stopErasing);
   canvas.addEventListener("mousemove", erase);
 
   return {
     cleanup() {
-      canvas.removeEventListener("mousedown", handleMouseDown);
-      canvas.removeEventListener("mouseup", handleMouseUp);
+      canvas.removeEventListener("mousedown", startErasing);
+      canvas.removeEventListener("mouseup", stopErasing);
       canvas.removeEventListener("mousemove", erase);
+      delete canvas._eraseMouseDown;
+      delete canvas._eraseMouseUp;
+      delete canvas._eraseMouseMove;
+      ctx.globalCompositeOperation = 'source-over';
     },
   };
 }

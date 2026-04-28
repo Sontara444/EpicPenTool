@@ -10,11 +10,6 @@
     <canvas id="canvas"></canvas>
 
     <div class="toolbar" id="toolbar">
-      <div
-        id="dragArea"
-        style="cursor: move; height: 10px; background-color: #ccc"
-      ></div>
-
       <!-- ✅ Eye Toggle (keep .blue) -->
       <button
         id="hamburgerToggle"
@@ -36,6 +31,10 @@
       <!-- ❌ Pencil Button: remove .blue -->
       <button id="pencilBtn" class="tool-button" title="Pencil">
         <img src="./scripts/images/pencil.png" alt="Pencil" />
+      </button>
+
+      <button id="highlighterBtn" class="tool-button" title="Highlighter">
+        <img src="./scripts/images/highlighter.png" alt="Highlighter" />
       </button>
 
       <button id="shapesBtn" class="tool-button" title="Shapes">
@@ -77,6 +76,10 @@
 
       <button id="clearBtn" class="tool-button" title="Clear">
         <img src="./scripts/images/clear.png" alt="Clear" />
+      </button>
+
+      <button id="whiteboardBtn" class="tool-button" title="Whiteboard Toggle">
+        <img src="./scripts/images/whiteboard.png" alt="Whiteboard" />
       </button>
 
       <div class="color-picker-box">

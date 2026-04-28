@@ -9,7 +9,7 @@ export function setupMenuToggle(toolbarId, buttonId, iconPathVisible, iconPathHi
       toolbarVisible = !toolbarVisible;
   
       const toolbarChildren = Array.from(toolbar.children).filter(
-        (child) => child !== menuBtn
+        (child) => child !== menuBtn && !child.classList.contains('toolbar-logo') && child.id !== 'dragArea'
       );
   
       toolbarChildren.forEach((child) => {
