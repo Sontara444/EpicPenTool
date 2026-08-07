@@ -1,6 +1,6 @@
 /* 
-  ✨ MIDNIGHT GLASS UI THEME ✨
-  A beautifully structured, ultra-slim, dark floating widget design. 
+  ✨ MATTE INDIGO UI THEME ✨
+  Premium, polished, slim vertical layout. 
 */
 
 body {
@@ -26,7 +26,6 @@ canvas {
 
 canvas.disabled {
   pointer-events: none;
-  /* Drawings should remain perfectly visible even when interacting with background apps */
   opacity: 1 !important; 
 }
 
@@ -39,7 +38,7 @@ canvas.disabled {
 .toolbar {
   position: fixed;
   top: 80px;
-  left: 20px;
+  left: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,71 +46,95 @@ canvas.disabled {
   cursor: grab;
   user-select: none;
   
-  /* Ultra-Premium Glassmorphism container */
-  background: rgba(15, 23, 42, 0.75); /* Slate 900 slightly more transparent */
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-radius: 28px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.15);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 16px 8px;
-  gap: 6px;
-  width: 52px; /* Wider profile for bigger icons */
+  /* Premium Dark Matte Glass */
+  background: rgba(24, 25, 29, 0.7); /* #18191D base */
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+  border-radius: 24px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 14px 6px;
+  gap: 2px;
+  width: 42px; /* Slimmer profile (approx 15-20% slimmer than 50px) */
   box-sizing: border-box;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Invert all black icons to a crisp, translucent white */
-.tool-button img {
-  filter: brightness(0) invert(1) opacity(0.85);
-  transition: all 0.2s ease;
-  width: 26px; /* Bigger icons! */
-  height: 26px;
-  object-fit: contain;
+/* Elegant Dividers */
+.divider {
+  width: 24px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 8px 0;
+  border-radius: 1px;
 }
 
+/* Crisp SVG Icons */
+.tool-button svg {
+  color: rgba(255, 255, 255, 0.65);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  width: 22px; /* Increased icon size by ~20% */
+  height: 22px;
+  stroke-width: 1.5px; /* Slightly thinner stroke looks more elegant on larger icons */
+}
+
+/* Touch Targets */
 .tool-button {
-  width: 38px; /* Bigger buttons */
-  height: 38px;
+  width: 30px;
+  height: 30px;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: transparent;
-  border-radius: 12px;
+  border-radius: 10px; /* Subtle pill/squircle */
   padding: 0;
-  margin: 0;
+  margin: 2px 0;
   box-sizing: border-box;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
   cursor: pointer;
+  position: relative;
 }
 
 .tool-button:hover {
-  background-color: rgba(255, 255, 255, 0.12);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: scale(1.04);
 }
 
-.tool-button:hover img {
-  opacity: 1;
-  transform: scale(1.1);
+.tool-button:hover svg {
+  color: rgba(255, 255, 255, 1);
 }
 
 .tool-button:active {
-  transform: translateY(1px) scale(0.95);
+  transform: scale(0.92);
 }
 
-/* 🔵 ACTIVE TOOLS */
+/* ✨ ACTIVE TOOLS (Floating Indicator) */
 .tool-button.active,
 #toggleBtn.blue {
-  background: linear-gradient(135deg, #0284c7, #0ea5e9); /* Richer Sky Blue */
-  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.5), inset 0 1px 1px rgba(255,255,255,0.3);
+  background: transparent;
+  box-shadow: none;
 }
 
-.tool-button.active img,
-#toggleBtn.blue img {
-  filter: brightness(0) invert(1) opacity(1);
-  transform: scale(1.05);
+/* Subtle accent line on the left side */
+.tool-button.active::before,
+#toggleBtn.blue::before {
+  content: '';
+  position: absolute;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 12px;
+  background: #8c7bff;
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(140, 123, 255, 0.6);
+}
+
+.tool-button.active svg,
+#toggleBtn.blue svg {
+  color: #a496ff; /* Brighter, glowing Indigo for icon */
+  filter: drop-shadow(0 0 6px rgba(110, 91, 255, 0.8));
 }
 
 #toggleBtn.toggle-off {
@@ -119,28 +142,22 @@ canvas.disabled {
   box-shadow: none !important;
 }
 #toggleBtn.toggle-off:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-
-/* ➖ SEPARATORS & STRUCTURE */
+/* ➖ THICKNESS STRUCTURE */
 .thickness-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
-  padding: 8px 0;
   width: 100%;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  margin: 6px 0;
 }
 
 .thickness-selector {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   padding: 4px 0;
   width: 100%;
@@ -150,23 +167,21 @@ canvas.disabled {
   display: none;
 }
 
-/* Override inline styles for bigger dots */
+/* Clean Thickness Dots */
 .thickness-dot {
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.35);
   border-radius: 50%;
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.thickness-dot[data-size="2"] { width: 6px !important; height: 6px !important; }
-.thickness-dot[data-size="4"] { width: 10px !important; height: 10px !important; }
-.thickness-dot[data-size="6"] { width: 16px !important; height: 16px !important; }
-.thickness-dot[data-size="8"] { width: 22px !important; height: 22px !important; }
+.thickness-dot[data-size="2"] { width: 4px !important; height: 4px !important; }
+.thickness-dot[data-size="4"] { width: 7px !important; height: 7px !important; }
+.thickness-dot[data-size="6"] { width: 11px !important; height: 11px !important; }
+.thickness-dot[data-size="8"] { width: 15px !important; height: 15px !important; }
 
 .thickness-dot:hover {
-  transform: scale(1.3);
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  background-color: rgba(255, 255, 255, 0.9);
+  transform: scale(1.4);
 }
 
 /* 🎨 COLOR PALETTE */
@@ -175,44 +190,39 @@ canvas.disabled {
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   background-color: transparent;
-  padding: 4px 0;
-  margin: 4px 0;
+  padding: 2px 0;
 }
 
 .color-box {
-  width: 14px; /* Bigger color dots */
-  height: 14px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.1);
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .color-box:hover {
-  transform: scale(1.4);
-  border-color: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  transform: scale(1.3);
+  border-color: rgba(255,255,255,0.8);
 }
 
 #colorPicker {
-  width: 32px; /* Bigger custom color wheel */
-  height: 32px;
+  width: 22px; 
+  height: 22px;
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.3);
+  border: 1px solid rgba(255,255,255,0.15);
   cursor: pointer;
   padding: 0;
-  margin: 6px 0 0 0;
+  margin: 2px 0;
   background-color: transparent;
   overflow: hidden;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 #colorPicker:hover {
   transform: scale(1.1);
-  border-color: white;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+  border-color: rgba(255,255,255,0.5);
 }
 
 #colorPicker::-webkit-color-swatch-wrapper {
@@ -224,29 +234,19 @@ canvas.disabled {
   border-radius: 50%;
 }
 
-/* 🌀 LOGO / DRAG HANDLE */
-.toolbar-logo {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255,255,255,0.08);
-  border-radius: 50%;
-  cursor: grab;
-  margin-bottom: 8px;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+/* ❌ CLOSE APP BUTTON */
+.close-app-btn {
+  background-color: transparent;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
 }
-
-.toolbar-logo:hover {
-  background-color: rgba(255,255,255,0.15);
-  transform: translateY(-1px);
+.close-app-btn svg {
+  color: rgba(255, 255, 255, 0.4);
 }
-
-.toolbar-logo img {
-  width: 18px;
-  height: 18px;
-  opacity: 0.9;
-  filter: brightness(0) invert(1);
+.close-app-btn:hover {
+  background-color: rgba(239, 68, 68, 0.15);
+}
+.close-app-btn:hover svg {
+  color: #ef4444; /* Minimal red hover */
 }

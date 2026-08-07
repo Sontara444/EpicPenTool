@@ -11,39 +11,36 @@
 
     <div class="toolbar" id="toolbar">
       <!-- ✅ Eye Toggle (keep .blue) -->
-      <button
-        id="hamburgerToggle"
-        class="tool-button blue"
-        title="Toggle Toolbar"
-      >
-        <img src="./scripts/images/eye.png" alt="Eye Toggle" />
+      <button id="hamburgerToggle" class="tool-button blue" title="Toggle Toolbar">
+        <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+        <svg class="icon-closed" style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 2 20 20"/><path d="M6.71 6.71q-.8.56-1.55 1.18A10.7 10.7 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.39-1.61"/><path d="M15.42 15.42 14.1 14.1a3 3 0 0 1-4.2-4.2L8.58 8.58a5 5 0 0 0 5.84 5.84z"/><path d="M17.5 10.5A3 3 0 0 0 12 5a3 3 0 0 0-1.5.4M22 12s-2.1-4.9-6.4-6.4"/></svg>
       </button>
 
       <!-- ✅ Toggle Mode (keep .blue + .active) -->
-      <button
-        id="toggleBtn"
-        class="tool-button blue active toggle-on"
-        title="Toggle Mode"
-      >
-        <img src="./scripts/images/arrow.png" alt="Toggle" />
+      <button id="toggleBtn" class="tool-button blue active toggle-on" title="Toggle Mode">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="m13 13 6 6"/></svg>
       </button>
+
+      <div class="divider"></div>
 
       <!-- ❌ Pencil Button: remove .blue -->
       <button id="pencilBtn" class="tool-button" title="Pencil">
-        <img src="./scripts/images/pencil.png" alt="Pencil" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
       </button>
 
       <button id="highlighterBtn" class="tool-button" title="Highlighter">
-        <img src="./scripts/images/highlighter.png" alt="Highlighter" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg>
       </button>
 
       <button id="shapesBtn" class="tool-button" title="Shapes">
-        <img src="./scripts/images/line.png" alt="Shapes Tool" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19 19 5"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/></svg>
       </button>
 
       <button id="eraserBtn" class="tool-button" title="Eraser">
-        <img src="./scripts/images/eraser.png" alt="Eraser" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>
       </button>
+
+      <div class="divider"></div>
 
       <div class="thickness-wrapper">
         <div id="thicknessSelector" class="thickness-selector collapsed">
@@ -70,37 +67,41 @@
         </div>
       </div>
 
+      <div class="divider"></div>
+
       <button id="undoBtn" class="tool-button" title="Undo">
-        <img src="./scripts/images/undo.png" alt="Undo" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
       </button>
 
       <button id="clearBtn" class="tool-button" title="Clear">
-        <img src="./scripts/images/clear.png" alt="Clear" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
       </button>
 
       <button id="whiteboardBtn" class="tool-button" title="Whiteboard Toggle">
-        <img src="./scripts/images/whiteboard.png" alt="Whiteboard" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21v-9"/></svg>
       </button>
+
+      <div class="divider"></div>
 
       <div class="color-picker-box">
         <div
           class="color-box"
-          style="background-color: #ff0000"
+          style="background-color: #ef4444"
           title="Red"
         ></div>
         <div
           class="color-box"
-          style="background-color: #00ff00"
+          style="background-color: #22c55e"
           title="Green"
         ></div>
         <div
           class="color-box"
-          style="background-color: #0000ff"
+          style="background-color: #3b82f6"
           title="Blue"
         ></div>
         <div
           class="color-box"
-          style="background-color: #ffff00"
+          style="background-color: #eab308"
           title="Yellow"
         ></div>
       </div>
@@ -111,8 +112,11 @@
         value="#000000"
         title="Pick a color"
       />
-      <button id="closeBtn" class="tool-button" style="margin-top: 10px;" title="Quit App">
-        <img src="./scripts/images/close.png" alt="Quit" />
+
+      <div class="divider"></div>
+
+      <button id="closeBtn" class="tool-button close-app-btn" title="Quit App">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
     </div>
 

@@ -16,9 +16,18 @@ export function setupMenuToggle(toolbarId, buttonId, iconPathVisible, iconPathHi
         child.style.display = toolbarVisible ? '' : 'none';
       });
   
-      const img = menuBtn.querySelector('img');
-      if (img) {
-        img.src = toolbarVisible ? iconPathVisible : iconPathHidden;
+      const iconOpen = menuBtn.querySelector('.icon-open');
+      const iconClosed = menuBtn.querySelector('.icon-closed');
+      
+      if (iconOpen && iconClosed) {
+        iconOpen.style.display = toolbarVisible ? 'block' : 'none';
+        iconClosed.style.display = toolbarVisible ? 'none' : 'block';
+      } else {
+        // Fallback for img
+        const img = menuBtn.querySelector('img');
+        if (img) {
+          img.src = toolbarVisible ? iconPathVisible : iconPathHidden;
+        }
       }
     });
   }
