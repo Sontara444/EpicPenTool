@@ -2,7 +2,13 @@ export function createUndoManager(elementsRef, redrawCallback) {
   let history = [];
 
   function saveState() {
-    const snapshot = JSON.parse(JSON.stringify(elementsRef));
+    const snapshot = elementsRef.map(el => {
+      // Shallow copy the object
+      const cloned = { ...el };
+      // Deep copy the points array if it exists
+      if (cloned.points) cloned.points = [...cloned.points];
+      return cloned;
+    });
     history.push(snapshot);
   }
 

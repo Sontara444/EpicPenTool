@@ -12,6 +12,10 @@ ipcMain.handle('store-set', (event, key, val) => {
   if (store) store.set(key, val);
 });
 
+ipcMain.on('close-app', () => {
+  app.quit();
+});
+
 app.setPath('userData', path.join(__dirname, 'electron-user-data'));
 app.commandLine.appendSwitch('disable-gpu-shader-disk-cache');
 

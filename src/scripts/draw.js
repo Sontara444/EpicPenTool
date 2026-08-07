@@ -99,6 +99,11 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
             ctx.lineTo(element.x2, element.y2);
           }
           ctx.stroke();
+        } else if (element.type === 'image') {
+          ctx.globalCompositeOperation = 'source-over';
+          if (element.img && element.img.complete) {
+            ctx.drawImage(element.img, element.x, element.y, element.width, element.height);
+          }
         }
       });
       ctx.globalCompositeOperation = 'source-over'; // Reset back to normal

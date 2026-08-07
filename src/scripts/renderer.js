@@ -8,6 +8,7 @@ import { createUndoManager } from "./undo.js";
 import { setupColorPicker } from "./colorpicker.js";
 import { addToolbarLogo } from "./logo.js";
 import { setupDraggableToolbar } from "./dragToolbar.js";
+import { setupDragAndDrop } from "./dragDrop.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
@@ -45,6 +46,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const undoManager = createUndoManager(elements, () => drawHandlers.redraw());
 
   let drawHandlers = setupDrawCanvas(canvas, elements, pencilThickness, undoManager, pencilColor);
+  
+  // Setup drag and drop for images
+  setupDragAndDrop(canvas, elements, drawHandlers.redraw, undoManager);
   let eraseHandlers = null;
   let shapeHandlers = null;
 
@@ -112,6 +116,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ Setup toggle (drawing on/off)
   setupToggleDrawing(toggleBtn, canvas, (val) => (drawingEnabled = val));
 
+  // ✅ Close button logic
+  const closeBtn = document.getElementById("closeBtn");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      if (window.electronAPI && window.electronAPI.closeApp) {
+        window.electronAPI.closeApp();
+      }
+    });
+  }
+
   // ✅ Setup thickness
   setupThicknessControl(
     document.querySelectorAll(".thickness-dot"),
@@ -151,6 +165,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   );
+
+  // ✅ Fix toolbar click-through bug
+  const toolbarEl = document.getElementById("toolbar");
+  if (toolbarEl) {
+    toolbarEl.addEventListener("mouseenter", () => {
+      if (!drawingEnabled && window.electronAPI && window.electronAPI.toggleDrawingMode) {
+        // Re-enable pointer events for the window while hovering the toolbar
+        window.electronAPI.toggleDrawingMode(true);
+      }
+    });
+    toolbarEl.addEventListener("mouseleave", () => {
+      if (!drawingEnabled && window.electronAPI && window.electronAPI.toggleDrawingMode) {
+        // Re-disable pointer events for the window when leaving the toolbar
+        window.electronAPI.toggleDrawingMode(false);
+      }
+    });
+  }
 
   // ✅ Menu (eye icon)
   setupMenuToggle("toolbar", "hamburgerToggle", "./scripts/images/eye.png", "./scripts/images/close.png");
