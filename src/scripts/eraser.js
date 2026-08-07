@@ -19,6 +19,8 @@ export function setupEraseCanvas(canvas, elements, redraw, undoManager, eraserSi
     currentPath.push({ x, y });
   };
 
+  let rafId = null;
+
   const erase = (e) => {
     if (!isErasing) return;
     
@@ -30,12 +32,15 @@ export function setupEraseCanvas(canvas, elements, redraw, undoManager, eraserSi
     const x = e.clientX - canvas.offsetLeft;
     const y = e.clientY - canvas.offsetTop;
     
-    ctx.lineWidth = eraserSize;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = 'rgba(0,0,0,1)';
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    currentPath.push({ x, y });
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(() => {
+      ctx.lineWidth = eraserSize;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'rgba(0,0,0,1)';
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      currentPath.push({ x, y });
+    });
   };
 
   const stopErasing = () => {

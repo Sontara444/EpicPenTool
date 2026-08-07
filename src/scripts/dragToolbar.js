@@ -27,10 +27,14 @@ export async function setupDraggableToolbar(toolbarId) {
       document.body.style.userSelect = "none";
     });
   
+    let rafId = null;
     document.addEventListener("mousemove", (e) => {
       if (!isDragging) return;
-      toolbar.style.left = `${e.clientX - offsetX}px`;
-      toolbar.style.top = `${e.clientY - offsetY}px`;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        toolbar.style.left = `${e.clientX - offsetX}px`;
+        toolbar.style.top = `${e.clientY - offsetY}px`;
+      });
     });
   
     document.addEventListener("mouseup", () => {

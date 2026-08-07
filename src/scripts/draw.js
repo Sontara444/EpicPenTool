@@ -17,8 +17,12 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
     currentPath.push({ x, y });
   };
 
+  let rafId = null;
+
   const draw = (e) => {
     if (!drawing) return;
+    
+    // Save state once per draw stroke
     if (!stateSaved && undoManager?.saveState) {
       undoManager.saveState();
       stateSaved = true;
@@ -26,16 +30,20 @@ export function setupDrawCanvas(canvas, elements, thickness = 2, undoManager, co
 
     const x = e.clientX - canvas.offsetLeft;
     const y = e.clientY - canvas.offsetTop;
-    ctx.lineWidth = thickness;
-    ctx.lineCap = isHighlighter ? 'butt' : 'round'; // Butt looks more like a marker
-    ctx.strokeStyle = color;
-    ctx.globalAlpha = isHighlighter ? 0.4 : 1.0;
-    
-    // If it's a highlighter, we don't want the stroke to compound heavily on itself during the live draw,
-    // but the standard way is fine for now.
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    currentPath.push({ x, y });
+
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(() => {
+      ctx.lineWidth = thickness;
+      ctx.lineCap = isHighlighter ? 'butt' : 'round'; // Butt looks more like a marker
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = isHighlighter ? 0.4 : 1.0;
+      
+      // If it's a highlighter, we don't want the stroke to compound heavily on itself during the live draw,
+      // but the standard way is fine for now.
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      currentPath.push({ x, y });
+    });
   };
 
   const stopDrawing = () => {

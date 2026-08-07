@@ -11,23 +11,28 @@ export function setupShapesTool(canvas, elements, redraw, undoManager, thickness
     isDrawing = true;
   }
 
+  let rafId = null;
+
   function handleMouseMove(e) {
     if (!isDrawing) return;
     const rect = canvas.getBoundingClientRect();
     const currentX = e.clientX - rect.left;
     const currentY = e.clientY - rect.top;
 
-    redraw(); // Clear and redraw existing elements
-    
-    // Draw the temporary preview line
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.beginPath();
-    ctx.lineWidth = thickness;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = color;
-    ctx.moveTo(startX, startY);
-    ctx.lineTo(currentX, currentY);
-    ctx.stroke();
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(() => {
+      redraw(); // Clear and redraw existing elements
+      
+      // Draw the temporary preview line
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.beginPath();
+      ctx.lineWidth = thickness;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = color;
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(currentX, currentY);
+      ctx.stroke();
+    });
   }
 
   function handleMouseUp(e) {
