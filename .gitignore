@@ -27,3 +27,6 @@ yarn.lock
 
 # Ignore MacOS system files
 .DS_Store
+
+# Ignore Electron user data cache
+src/electron-user-data/
